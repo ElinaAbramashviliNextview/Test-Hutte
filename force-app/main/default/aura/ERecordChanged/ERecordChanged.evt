@@ -1,6 +1,0 @@
-<aura:event type="COMPONENT" description="">
-    <aura:attribute name="key" type="string" required="true" description="Unlike Updated and Created, no DML happend. Used to identify particular change distincted by key, if necessary"/>
-    <aura:attribute name="recordId" type="string"/>
-    <aura:attribute name="changes" type="object[]" description="List of fields that have changer in format [{field:'x',oldValue:'xy',newValue:'yy'}]" />
-    <aura:attribute name="data" type="object"/>
-</aura:event>

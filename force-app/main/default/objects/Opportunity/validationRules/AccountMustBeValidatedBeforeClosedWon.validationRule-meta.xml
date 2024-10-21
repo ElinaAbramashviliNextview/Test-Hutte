@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>AccountMustBeValidatedBeforeClosedWon</fullName>
-    <active>true</active>
-    <errorConditionFormula>AND(Account.IsValidated__c == false, ISCHANGED(StageName), ISPICKVAL(StageName,&quot;Closed Won&quot;))</errorConditionFormula>
-    <errorMessage>Account must be validated in SAP before the Opportunity is transfered to Closed Won.</errorMessage>
-</ValidationRule>
