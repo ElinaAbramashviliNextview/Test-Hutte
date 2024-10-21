@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ForceStatusCode__c</fullName>
+    <description>Used for Response Status Code manual setup - it has no consequence wit the service run - it will always end with this status (direction TO SF ONLY)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Used for Response Status Code manual setup - it has no consequence wit the service run - it will always end with this status (direction TO SF ONLY)</inlineHelpText>
+    <label>Force Status Code</label>
+    <precision>3</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,26 @@
+.THIS.slds-backdrop{z-index: 9051!important;}
+.THIS.slds-modal{z-index: 9052!important;}
+.THIS.slds-modal > .slds-modal__container{height: unset;} /* display modal top, not center */
+.THIS.slds-modal > .slds-modal__container > .slds-modal__content {max-height: 80vh!important;}
+.THIS.slds-modal > .slds-modal__container > .slds-modal__content > .tspc-scroll-wrap{overflow-y:auto; overflow-x: hidden; max-height:80vh}
+.THIS.slds-modal > .slds-modal__container.has-header > .slds-modal__content,
+.THIS.slds-modal > .slds-modal__container.has-footer > .slds-modal__content {max-height: 75vh!important;}
+.THIS.slds-modal > .slds-modal__container.has-header > .slds-modal__content > .tspc-scroll-wrap,
+.THIS.slds-modal > .slds-modal__container.has-footer > .slds-modal__content > .tspc-scroll-wrap{overflow-y:auto; overflow-x: hidden; max-height:75vh}
+
+.THIS.slds-modal > .slds-modal__container.has-header > .slds-modal__content > .tspc-scroll-wrap{overflow-y:auto; overflow-x: hidden; max-height:75vh}
+.THIS.slds-modal > .slds-modal__container.has-footer.has-header > .slds-modal__content {max-height: 73vh!important;}
+.THIS.slds-modal > .slds-modal__container.has-footer.has-header > .slds-modal__content > .tspc-scroll-wrap{overflow-y:auto; overflow-x: hidden; max-height:75vh}
+.THIS .header-buttons{ position: absolute; right: 21px; top: 12px;}
+.THIS .tspc-loading-overlay{position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 9050; background-color: rgba(255, 255, 255, 0.75); visibility: visible; opacity: 1; transition: opacity .2s ease,visibility 0s; transition-delay: 0s,.3s;}
+
+
+/* Modal */
+.THIS.slds-modal{outline: none!important /*fix ugly otline on focus*/}
+.THIS.slds-modal .slds-modal__content{max-height: 70vh; /* set max height acoording to VH. Pprobably our loader wrapper wihin modal broke standard behaviour */}
+@media (min-width: 48em){
+	.THIS.slds-modal.slds-modal_size60 .slds-modal__container{width:60%; max-width: none; min-width: 40rem;}
+}
+@media (min-width: 48em){
+	.THIS.slds-modal.slds-modal_size50 .slds-modal__container{width:50%; max-width: none; min-width: 40rem;}
+}

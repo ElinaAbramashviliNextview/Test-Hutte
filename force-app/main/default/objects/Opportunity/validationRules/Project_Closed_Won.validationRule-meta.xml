@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Closed_Won</fullName>
+    <active>false</active>
+    <description>Closed won on project opp can be only set by automated proces, not by user.</description>
+    <errorConditionFormula>IsProject__c &amp;&amp;  IsClosed &amp;&amp; IsWon &amp;&amp; !IsClosedWonApexSet__c</errorConditionFormula>
+    <errorMessage>Cannot set &quot;Close Won&quot; on project opportunity manually. Set on child opp instead.</errorMessage>
+</ValidationRule>

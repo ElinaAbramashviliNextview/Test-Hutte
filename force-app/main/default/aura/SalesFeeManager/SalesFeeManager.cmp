@@ -1,0 +1,83 @@
+<aura:component controller="SalesFeeManagerController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+
+	<!-- INCLUDE -->
+	<ltng:require scripts="{!$Resource.LightningNotifications + '/js/common.js'}"/>
+
+	<!-- HANDLERS -->
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+	<!-- ATTRIBUTTES -->
+    <aura:attribute name="isReady" type="Boolean" default="false"/>
+	<aura:attribute name="isLoading" type="Boolean" default="true" />
+
+    <aura:attribute name="salesSettings" type="Object[]"/>
+
+    <lightning:spinner variant="brand" size="small" class="{!if(v.isLoading, '','slds-hide')}" alternativeText="Loader"/>
+	<aura:if isTrue="{!v.isReady}">
+        <div class="body">
+            <div class="slds-page-header slds-page-header_record-home">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning:icon iconName="standard:high_velocity_sales" alternativeText="Project Sales Fee"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span class="slds-page-header__title slds-truncate">Project Sales Fee</span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__controls">
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li>
+                                        <button class="slds-button slds-button_brand" onclick="{!c.saveSettings}">
+                                            <lightning:icon class="whiteIcon" iconName="utility:check" size="x-small"/>&nbsp;Save
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-section">
+                <table width="70%" class="slds-table slds-table_cell-buffer slds-table_bordered height-fix slds-table_resizable-cols">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" width="50%" style="text-align: center;">Name</th>
+                            <th scope="col" width="30%" colspan="2" style="text-align: center; border-left: 1px solid #dddbda; border-right: 1px solid #dddbda">Range</th>
+                            <th scope="col" width="15%" style="text-align: center;">Sales Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.salesSettings}" var="salesSett">
+                            <tr class="slds-line-height_reset">
+                                <td scope="col">
+                                    <lightning:input type="text" value="{!salesSett.Name}"/>
+                                </td>
+                                <td scope="col">
+                                    <lightning:input type="number" value="{!salesSett.LowerRange__c}" step="0.01"/>
+                                </td>
+                                <td scope="col">
+                                    <lightning:input type="number" value="{!salesSett.HigherRange__c}" step="0.01"/>
+                                </td>
+                                <td scope="col">
+                                    <lightning:input type="number" value="{!salesSett.Reward__c}" step="0.01"/>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

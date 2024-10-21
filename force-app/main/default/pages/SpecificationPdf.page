@@ -1,0 +1,317 @@
+<apex:page standardController="Quote" extensions="SpecificationPdfController" renderAs="PDF" applyBodyTag="false" applyHtmlTag="false" showHeader="false" language="{!Quote.Language__c}">
+
+<html>
+    <head>
+        <title>Specification PDF</title>
+    <meta charset="utf-8" /> 
+    <!--=========================================================================================================================== 
+    STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - S
+    ==============================================================================================================================-->
+        <style type="text/css" media="print">
+        /* Structure */
+            *{font-family: 'Arial Unicode MS'!important; color:#323232} /* Required for all, because SF richtext editor creates inline styles with different fonts*/
+            body, html{font-size: 10px!important;}
+            @page{
+                size:landscape;
+                margin:90px 0 90px 0;
+                padding:0;
+                @top-center {content: element(pageHeader);}
+                @bottom-center {content: element(footer);}
+            } 
+
+        /* Header */
+            div#pageHeader {position:running(pageHeader);}
+            div.header{display:block; padding-right:30px; text-align: right;}
+
+        /* Footer */ 
+            div#footer{border-top: 1px solid #959595;display:block; padding:0 90px; color:#323232; font-size:12px; position:running(footer); text-align: right}
+            div#footer a{color:#000; text-decoration:none;}
+
+        /* Footer */
+            .header-font {
+                font-size: 13px;
+            }
+
+        /* Page Breaking */
+            img{page-break-inside: avoid; page-break-before: avoid; page-break-after: avoid;}
+            .auto-break{page-break-after: auto;}
+            .no-break{page-break-after: avoid;}
+            .no-break-child *{page-break-after: avoid; page-break-before: avoid;}
+            .break {
+                page-break-before: always;
+            }
+
+         /* Common Styles */
+            h1 *, h2 *, h3 *, h4 *, h5 * {vertical-align: middle;}
+            h1, h2, h3, h4, h5 {margin:0 0 10px 0; padding: 0}
+            h1 {font-size: 24px;}
+            h2 {font-size: 20px;}
+            h3 {font-size: 18px;}
+
+            h4 {font-size: 14px;}
+            a{color:#2670CC; text-decoration:none;}
+            .uniform-long-text * {font-size:13px!important;}
+            p{margin:0; padding:0;}
+
+            ul.dashed {list-style-type: none;}
+            ul.dashed > li:before {content: "- ";}
+
+            table {border-collapse: collapse;}
+            .bordered td, .bordered th {
+                border-bottom: 2px solid white;
+            }
+            thead {
+                background-color: #919191;
+            }
+
+            .p-t-20{padding-top: 20px}
+
+            .m-t-10{margin-top: 10px;}
+            .m-t-20 {
+                margin-top: 20px;
+            }
+            .m-t-30{margin-top: 30px}
+            .m-t-60{margin-top: 60px}
+            .m-b-10{margin-bottom: 10px}
+            .m-b-30{margin-bottom: 30px}
+            .m-b-60{margin-bottom: 60px}
+            .p-lr-10{padding-left: 3px; padding-right: 3px;}
+            .f14{font-size: 14px}
+            .upperCase{text-transform: uppercase;}
+            .text-right{text-align: right;}
+            .text-center{text-align: center;}
+            .text-left{text-align: left;}
+            .vertAlignTop {
+                vertical-align: text-top;
+            }
+            .vertAlignMid {
+                vertical-align: middle;
+            }
+
+        /* Colors */
+            .text-white{color: #fff;}
+            .text-black{color: #000;}
+            .fg-grey{color: #444;}
+            .bg-light-grey {
+                background-color: #d9d9d9;
+            }
+            .bg-dark-gray {
+                background-color: #808080;
+            }
+            .bg-gray {
+                background-color: #bfbfbf;
+            }
+            .bg-white {
+                background-color: #fff;
+            }
+
+
+        /* Standard pages */
+            div.content {padding:0 20px;}
+
+        /* Specific styles */
+
+        </style>
+    </head>
+    <body>
+
+    <apex:variable var="sectionCount" value="{!0}"/>
+    <!--=========================================================================================================================== 
+    HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS
+    ===============================================================================================================================-->
+        <div id="pageHeader" class="header">
+            <div class="text-right">
+                <apex:image url="{!URLFOR($Resource.SpecificationLogo)}" height="70"/>
+            </div>
+        </div>
+
+    <!--=========================================================================================================================== 
+    FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS
+    ===============================================================================================================================-->
+        <div>
+            <!--<div id="footer" style="font-size: 10px">
+                <div>SilentLab s.r.o.</div>
+                <div>{!$Label.QuotePDF_Street}</div>
+                <div>{!$Label.QuotePDF_City}</div>
+                <div>{!$Label.QuotePDF_Web}</div>
+            </div>-->
+        </div>
+
+    <!--=========================================================================================================================== 
+    CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT
+    ===============================================================================================================================-->
+        <div class="content">
+            <div>
+                <!-- Product Detail -->
+                <apex:outputPanel rendered="{!sms.size > 0}">
+                    <apex:variable value="{!0}" var="index"></apex:variable>
+                    <apex:repeat value="{!sms}" var="sm">
+                        <apex:variable value="{!index+1}" var="order"></apex:variable>
+                        <div class="{!if(index>0,'break','')}">
+                            <div>
+                                <table width="100%">
+                                    <tr>
+                                        <td class="header-font upperCase bg-dark-gray vertAlignMid text-center text-white" width="30%" height="40px">{!$Label.QuotePDF_NumberProjectName}</td>
+                                        <td class="bg-light-grey vertAlignMid text-center" width="30%">{!quote.Opportunity.OpportunityNo__c}&nbsp;{!quote.Opportunity.Name}</td>
+                                        <td class="bg-dark-gray vertAlignMid text-center text-white" width="5%">{!order}</td>
+                                        <td class="vertAlignMid text-center" width="5%">Z</td>
+                                        <td class="bg-dark-gray vertAlignMid text-center text-white" width="5%">{!sms.size}</td>
+                                        <td width="25%">&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="m-t-30 m-b-10 text-center">
+                                <table width="100%">
+                                    <tr>
+                                        <td class="vertAlignTop" width="30%" rowspan="2">
+                                            <table style="width:100%;" class="bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <apex:outputPanel rendered="{!Quote.Language__c == 'cs'}" layout="none">
+                                                            <th class="upperCase text-center text-white header-font" height="35px" colspan="2"><!--{!$Label.QuotePDF_Specification}&nbsp;-->{!sm.qli.Product2.BusinessName__c}
+                                                                <span class="text-black">
+                                                                    &nbsp;-&nbsp;
+                                                                    <apex:outputText value="{0, number, 0}">
+                                                                        <apex:param value="{!sm.qli.Quantity}" />
+                                                                    </apex:outputText>
+                                                                    &nbsp;ks
+                                                                </span>
+                                                            </th>
+                                                        </apex:outputPanel>
+                                                        <apex:outputPanel rendered="{!Quote.Language__c == 'en_US'}" layout="none">
+                                                            <th class="upperCase text-center text-white header-font" colspan="2"><!--{!$Label.QuotePDF_Specification}&nbsp;-->{!sm.qli.Product2.BusinessNameEN__c}
+                                                                <span class="text-black">&nbsp;
+                                                                    <apex:outputText value="{0, number, 0}">
+                                                                        <apex:param value="{!sm.qli.Quantity}" />
+                                                                    </apex:outputText>&nbsp;pcs
+                                                                </span>
+                                                            </th>
+                                                        </apex:outputPanel>
+                                                        <th class="bg-white"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <apex:variable value="{!0}" var="itemIndex"></apex:variable>
+                                                    <apex:variable value="{!0}" var="equipmentIndex"></apex:variable>
+                                                    <apex:repeat value="{!sm.qlsis}" var="qlsi">
+                                                        <apex:outputPanel rendered="{!itemIndex > 0 && equipmentIndex == 0 && qlsi.Product2Id__r.Type__c == 'Z-ZBOZI'}" layout="none">
+                                                            <tr>
+                                                                <td class="bg-light-grey" height="20px" ColSpan="2"></td>
+                                                                <td class="bg-light-grey upperCase">Počet ks</td>
+                                                            </tr>
+                                                        </apex:outputPanel>
+                                                        <tr class="">
+                                                            <td width="45%" class="bg-gray upperCase text-left p-lr-10"><apex:outputField value="{!qlsi.Product2Id__r.Specification__c}"/></td>
+                                                            <td Class="bg-gray text-left p-lr-10">
+                                                                <apex:outputPanel rendered="{!Quote.Language__c == 'cs'}" layout="none">
+                                                                    <apex:outputPanel rendered="{!qlsi.Product2Id__r.BusinessName__c != null}" layout="none">
+                                                                        {!qlsi.Product2Id__r.BusinessName__c}
+                                                                    </apex:outputPanel>
+                                                                    <apex:outputPanel rendered="{!qlsi.Product2Id__r.BusinessName__c == null}" layout="none">
+                                                                        {!qlsi.Product2Id__r.Name}
+                                                                    </apex:outputPanel>
+                                                                </apex:outputPanel>
+                                                                <apex:outputPanel rendered="{!Quote.Language__c == 'en_US'}" layout="none">
+                                                                    <apex:outputPanel rendered="{!qlsi.Product2Id__r.BusinessNameEN__c != null}" layout="none">
+                                                                        {!qlsi.Product2Id__r.BusinessNameEN__c}
+                                                                    </apex:outputPanel>
+                                                                    <apex:outputPanel rendered="{!qlsi.Product2Id__r.BusinessNameEN__c == null}" layout="none">
+                                                                        {!qlsi.Product2Id__r.Name}
+                                                                    </apex:outputPanel>
+                                                                </apex:outputPanel>
+                                                            </td>
+                                                            <td class="{!if(qlsi.Product2Id__r.Type__c == 'Z-ZBOZI','bg-gray text-left p-lr-10', 'text-left p-lr-10')}">
+                                                                <apex:outputPanel rendered="{!qlsi.Product2Id__r.Type__c == 'Z-ZBOZI'}" layout="none">
+                                                                    <apex:outputText value="{0,number,0}">
+                                                                        <apex:param value="{!qlsi.Quantity__c}"/>
+                                                                    </apex:outputText>
+                                                                </apex:outputPanel>
+                                                            </td>
+                                                        </tr>
+                                                        <apex:outputPanel rendered="{!qlsi.Product2Id__r.Type__c == 'Z-ZBOZI'}" layout="none">
+                                                            <apex:variable value="{!equipmentIndex+1}" var="equipmentIndex"></apex:variable>                                                            
+                                                        </apex:outputPanel>
+                                                        <apex:variable value="{!itemIndex+1}" var="itemIndex"></apex:variable>
+                                                    </apex:repeat>
+                                                    <apex:outputPanel layout="none" rendered="{!qlisOpt.size > 0}">
+                                                        <apex:variable value="{!0}" var="optionIndex"></apex:variable>
+                                                        <apex:repeat value="{!sm.optQlis}" var="opt">
+                                                            <tr>
+                                                                <td class="bg-gray upperCase vertAlignTop text-left p-lr-10" height="10px">
+                                                                    <apex:outputPanel layout="none" rendered="{!optionIndex == 0}">{!$Label.QuotePDF_OptionalEquipment}</apex:outputPanel>
+                                                                </td>
+                                                                <td class="bg-gray vertAlignTop text-left p-lr-10">
+                                                                    <apex:outputPanel rendered="{!Quote.Language__c == 'cs'}" layout="none">
+                                                                        <apex:outputPanel rendered="{!opt.Product2.BusinessName__c != null}" layout="none">
+                                                                            {!opt.Product2.BusinessName__c}
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!opt.Product2.BusinessName__c == null}" layout="none">
+                                                                            {!opt.Product2.Name}
+                                                                        </apex:outputPanel>
+                                                                    </apex:outputPanel>
+                                                                    <apex:outputPanel rendered="{!Quote.Language__c == 'en_US'}" layout="none">
+                                                                        <apex:outputPanel rendered="{!opt.Product2.BusinessNameEN__c != null}" layout="none">
+                                                                            {!opt.Product2.BusinessNameEN__c}
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!opt.Product2.BusinessNameEN__c == null}" layout="none">
+                                                                            {!opt.Product2.Name}
+                                                                        </apex:outputPanel>
+                                                                    </apex:outputPanel>
+                                                                </td>
+                                                                <td class="bg-white"></td>
+                                                            </tr>
+                                                            <apex:variable value="{!optionIndex+1}" var="optionIndex"></apex:variable>
+                                                        </apex:repeat>
+                                                    </apex:outputPanel>
+                                                    <tr>
+                                                        <td class="bg-gray upperCase vertAlignTop text-left p-lr-10">{!$Label.QuotePDF_Descriptions}:</td>
+                                                        <td class="bg-gray vertAlignTop text-left p-lr-10" height="100px">{!sm.qli.Description}</td>
+                                                        <td class="bg-white"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>                                            
+                                        </td>
+                                        <td width="40%" rowspan="2" class="vertAlignMid">
+                                            <apex:repeat value="{!prodImg}" var="prodI">
+                                                <apex:outputPanel rendered="{!sm.qli.Product2Id == prodI.LinkedEntityId}">
+                                                    <apex:image url="/sfc/servlet.shepherd/version/download/{!prodI.ContentDocument.LatestPublishedVersionId}" width="400px"/>
+                                                </apex:outputPanel>     
+                                            </apex:repeat>                          
+                                        </td>
+                                        <td width="30%" class="text-right">
+                                            <apex:repeat value="{!prodLay}" var="prodL">
+                                                <apex:outputPanel rendered="{!sm.qli.Product2Id == prodL.LinkedEntityId}">                          
+                                                    <apex:image url="/sfc/servlet.shepherd/version/download/{!prodL.ContentDocument.LatestPublishedVersionId}"/>
+                                                </apex:outputPanel> 
+                                            </apex:repeat>
+                                        </td>
+                                    </tr>
+                                    <tr>    
+                                        <td>
+                                            <table align="right">
+                                                <tr class="bg-gray">
+                                                    <td>{!$Label.QuotePDF_Approved}:</td>
+                                                    <td width="100px"></td>
+                                                </tr>
+                                                <tr class="bg-light-grey">
+                                                    <td>{!$Label.SpecPDF_Date}:</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="bg-gray">
+                                                    <td class="vertAlignTop" height="50px">{!$Label.QuotePDF_Signature}:</td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>        
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <apex:variable value="{!index+1}" var="index"></apex:variable>
+                    </apex:repeat>
+                </apex:outputPanel>
+            </div>
+        </div>
+    </body>
+</html>
+</apex:page>

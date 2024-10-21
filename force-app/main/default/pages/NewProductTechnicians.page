@@ -1,0 +1,13 @@
+<apex:page showHeader="false" sidebar="false" standardController="RequestForTechnician__c" extensions="NewProductTechniciansVFController">
+    <apex:includeLightning />
+	<apex:includeScript value="/lightning/lightning.out.js" />
+
+	<div class="slds-scope" style="background: white">
+		<div id="NewProductTechnicians"></div>
+	</div>
+	<script>
+		$Lightning.use("c:QuoteManagerApp", function(){
+			$Lightning.createComponent("c:NewProductTechnicians", {recordId: '{!RequestForTechnician__c.Id}', editProdId: '{!editProdId}'}, "NewProductTechnicians",)
+		});
+	</script>
+</apex:page>

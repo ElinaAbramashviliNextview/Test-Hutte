@@ -1,0 +1,12 @@
+.THIS .table-section{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.THIS .height-fix tr {
+	height: 45px!important;
+}
+
+.THIS .whiteIcon svg {
+    fill: white;
+}

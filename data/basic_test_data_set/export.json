@@ -1,0 +1,58 @@
+{
+  "objects": [
+    {
+      "query": "SELECT all FROM Contact ORDER BY CreatedDate DESC LIMIT 1000",
+      "operation": "Upsert",
+      "externalId": "Name",
+      "mockFields": [
+        {
+          "name": "FirstName",
+          "pattern": "first_name"
+        },
+        {
+          "name": "LastName",
+          "pattern": "last_name"
+        },
+        {
+          "name": "Phone",
+          "pattern": "phone"
+        },
+        {
+          "name": "Email",
+          "pattern": "email"
+        }
+      ],
+      "updateWithMockData": true
+    },
+    {
+      "query": "SELECT all FROM Account",
+      "operation": "Upsert",
+      "externalId": "Name",
+      "master": false,
+      "excludedFields" :[
+      ],
+      "mockFields": [
+        {
+          "name": "Name",
+          "pattern": "company_name"
+        }
+      ],
+      "updateWithMockData": true
+    },
+    {
+      "query": "SELECT all FROM Opportunity",
+      "operation": "Upsert",
+      "externalId": "Name",
+      "master": false,
+      "excludedFields" :[
+      ],
+      "mockFields": [
+        {
+          "name": "Name",
+          "pattern": "company_name"
+        }
+      ],
+      "updateWithMockData": true
+    }
+  ]
+}

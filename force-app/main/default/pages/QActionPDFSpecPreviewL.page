@@ -1,0 +1,15 @@
+<apex:page showHeader="false" sidebar="false" standardController="Quote">
+    <apex:includeLightning />
+    <apex:includeScript value="/lightning/lightning.out.js" />
+
+    <div class="slds-scope" style="background: white">
+        <div id="PDFPrev"></div>
+    </div>
+    <script>
+        $Lightning.use("c:PDFPreviewApp", function(){
+            $Lightning.createComponent("c:QActionPDFPreview", {recordId: "{!Quote.Id}", pdfType: "SpecPDF"}, "PDFPrev", function(cmp){
+                            console.log(cmp);
+            });
+        });
+    </script>
+</apex:page>

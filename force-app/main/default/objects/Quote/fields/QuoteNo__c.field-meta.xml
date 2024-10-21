@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteNo__c</fullName>
+    <description>&lt;ProjectNumber&gt;.&lt;OppNo&gt;.&lt;QuoteVersion&gt;</description>
+    <externalId>false</externalId>
+    <inlineHelpText>&lt;ProjectNumber&gt;.&lt;OppNo&gt;.&lt;QuoteVersion&gt;</inlineHelpText>
+    <label>Quote No</label>
+    <length>20</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

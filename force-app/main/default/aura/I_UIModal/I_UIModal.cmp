@@ -1,0 +1,70 @@
+<aura:component >
+    <!-- VIEWPORT FIX -->
+    <style id="styleOverride">{!v.cssStyle}</style>
+    <aura:attribute name="cssStyle" type="String" />
+
+    <!-- API -->
+    <aura:method name="open" action="{!c.open}" description="Opens modal dialog with arguments"> 
+        <aura:attribute name="title" type="string"/>
+        <aura:attribute name="fnClose" type="object"/>
+    </aura:method>
+    <aura:method name="close" action="{!c.close}"> 
+        <aura:attribute name="skipOnClose" type="boolean"/>
+    </aura:method>
+    <aura:method name="showLoader" action="{!c.showLoader}"/>
+    <aura:method name="hideLoader" action="{!c.hideLoader}"/>
+
+    <!-- HENDLERS -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <!-- ATTRIBUTES -->
+    <aura:attribute name="size" type="String" default="medium"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="header" type="Boolean" default="true"/>
+    <aura:attribute name="footer" type="Boolean" default="true"/>
+    <aura:attribute name="footerClass" type="String"/>
+    <aura:attribute name="contentClass" type="String" default="slds-p-vertical_small slds-p-horizontal_medium"/>
+    <aura:attribute name="closeOnEsc" type="Boolean" default="true"/>
+    <aura:attribute name="minHeight" type="string" default="false"/>
+    <aura:attribute name="footerButtons" type="Aura.Component[]" required="false" description="Footer buttons to be displayed"/>
+    <aura:attribute name="headerButtons" type="Aura.Component[]" required="false" description="Header buttons to be displayed"/>
+    <aura:attribute name="fnOnClose" type="object" required="false" description="Function to be called on closing"/>
+
+    <!-- MEMBERS -->
+    <aura:attribute name="id" type="String" access="private" />
+    <aura:attribute name="isOpen" default="false" type="Boolean" access="private" />
+    <aura:attribute access="private" name="isLoading" type="boolean" default="false"/>
+
+    <!-- CONTENT -->
+    <section id="{!v.id}" onkeyup="{!c.closeOnEsc}" role="dialog" tabindex="-1" aria-modal="true" class="{!'slds-modal' + (v.size!=null ? ' slds-modal_'+v.size :'') + (v.isOpen ? ' slds-slide-up-open' : ' slds-hide')}">
+        <div class="{!'slds-modal__container ' + (v.header ? ' has-header':'') + (v.footer ? ' has-footer':'')}">
+            <header class="{!'slds-modal__header' + (!v.header ? ' slds-modal__header_empty':'')}">
+                <lightning:buttonIcon iconName="utility:close" onclick="{!c.close}" variant="bare-inverse" class="slds-modal__close" alternativeText="Close" title="Close" size="large" />
+                <h2 class="slds-text-heading_medium slds-hyphenate">{!v.header ? v.title : ''}</h2>
+                <div class="header-buttons">
+                    <aura:if isTrue="{!!empty(v.headerButtons)}">
+                        <aura:iteration items="{!v.headerButtons}" var="b">{!b}</aura:iteration>                            
+                    </aura:if>     
+                </div>
+            </header>
+            <div class="slds-modal__content slds-is-relative" style="{!'overflow:hidden; ' + (!empty(v.minHeight)?'min-height:'+v.minHeight:'')}">
+                <div class="{!'tspc-scroll-wrap ' + v.contentClass}">
+                    {!v.body}
+                </div>
+                <lightning:spinner variant="brand" size="small" class="{!if(v.isLoading,'','slds-hide')}" alternativeText="loading"/>
+            </div>
+            <aura:if isTrue="{!v.footer}">
+                <footer class="{!'slds-modal__footer slds-is-relative ' + v.footerClass}">
+                    <div class="{! 'tspc-loading-overlay ' + (v.isLoading?'':'slds-hide')}"></div>
+                    <aura:if isTrue="{!!empty(v.footerButtons)}">
+                        <aura:iteration items="{!v.footerButtons}" var="b">{!b}</aura:iteration>                            
+                        <aura:set attribute="else">
+                            <lightning:button variant="neutral" label="Close" onclick="{!c.close}" />        
+                        </aura:set>
+                    </aura:if>
+                </footer>
+            </aura:if>
+        </div>
+    </section>
+    <div class="{!'slds-backdrop ' + (v.isOpen ? 'slds-backdrop_open' : 'slds-backdrop_close')}"></div>
+</aura:component>

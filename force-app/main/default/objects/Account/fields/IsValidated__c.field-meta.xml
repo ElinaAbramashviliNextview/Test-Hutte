@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsValidated__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This field says whether was account validated in SAP.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This field says whether was account validated in SAP.</inlineHelpText>
+    <label>Validated</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

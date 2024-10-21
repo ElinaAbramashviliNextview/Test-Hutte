@@ -1,0 +1,74 @@
+.THIS .input-right input{text-align:right;}
+.THIS .color-red {color: red;}
+.THIS .slds-modal__content {
+	padding: 0 30px;
+}
+
+.THIS .modal-container-width {
+    margin: 0 auto;
+    width: 85%;
+    max-width: 95%;
+    min-width: 75%;
+}
+.THIS .li-fix {
+	background-color: white;
+}
+.THIS .li-fix:focus {
+		background-color: rgb(221, 219, 218);
+}
+.THIS div > .slds-dropdown_left {
+	right: 0;
+	left:auto;
+	transform:translateX(0);
+}
+.THIS .height-fix tr {
+	height: 45px!important;
+}
+.THIS .dropDownFix {
+	margin-top: 200px;
+}
+
+.THIS .slds-truncate{
+    white-space: normal!important;
+}
+.THIS .fixwidth {
+    white-space: normal!important;
+    padding-right: 20px;
+}
+
+.THIS tr.spaceUnder > td {
+    padding-bottom: 1em;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.THIS input::-webkit-outer-spin-button,
+.THIS input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.THIS input[type=number] {
+  -moz-appearance:textfield;
+}
+
+.THIS .whiteIcon svg {
+    fill: white;
+}
+
+.THIS .textRed {
+    color: red;
+}
+
+.THIS .sxc-maxDiscount {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.THIS .richTextFix{    
+    width: 400px;
+}
+
+.THIS .richTextFix .slds-rich-text-editor__toolbar{
+    display:none;
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>vacRep__Special_Objects__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Possibility to use objects that are no selectable sObjects in the &quot;object&quot;-picklist. Can&apos;t be combined with the &quot;object&quot;-field</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Possibility to use objects that are no selectable sObjects in the &quot;object&quot;-picklist. Can&apos;t be combined with the &quot;object&quot;-field</inlineHelpText>
+    <label>Special Objects</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Task</fullName>
+                <default>false</default>
+                <label>Task</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

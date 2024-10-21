@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALL_TO_DO</fullName>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>QuoteId__c</columns>
+    <columns>Status__c</columns>
+    <columns>TechnicianId__c</columns>
+    <columns>DescriptionForTechnician__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>NoteForSalesman__c</columns>
+    <columns>RequestProcessingDeadline__c</columns>
+    <columns>QuoteShippingAddress__c</columns>
+    <columns>OBJECT_ID</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Requested,In Progress</value>
+    </filters>
+    <label>ALL TO DO</label>
+</ListView>

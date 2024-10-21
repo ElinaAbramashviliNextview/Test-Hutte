@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AllBundles</fullName>
+    <columns>SAPId__c</columns>
+    <columns>PRODUCT2.NAME</columns>
+    <columns>BusinessName__c</columns>
+    <columns>PRODUCT2.FAMILY</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>SAPId__c</field>
+        <operation>contains</operation>
+        <value>NES</value>
+    </filters>
+    <label>All Bundles</label>
+</ListView>

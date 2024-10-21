@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>SUCCESS</fullName>
+        <default>false</default>
+        <label>SUCCESS</label>
+    </customValue>
+    <customValue>
+        <fullName>WARNING</fullName>
+        <default>false</default>
+        <label>WARNING</label>
+    </customValue>
+    <customValue>
+        <fullName>ERROR</fullName>
+        <default>false</default>
+        <label>ERROR</label>
+    </customValue>
+    <customValue>
+        <fullName>SYNCING</fullName>
+        <default>false</default>
+        <label>SYNCING</label>
+    </customValue>
+    <customValue>
+        <fullName>FORCE</fullName>
+        <default>false</default>
+        <label>FORCE</label>
+    </customValue>
+    <customValue>
+        <fullName>HOLD</fullName>
+        <default>false</default>
+        <label>HOLD</label>
+    </customValue>
+    <masterLabel>Sync Status</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

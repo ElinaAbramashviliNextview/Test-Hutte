@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__All</fullName>
+    <columns>NAME</columns>
+    <columns>MC4SF__Status__c</columns>
+    <columns>MC4SF__Emails_Sent__c</columns>
+    <columns>MC4SF__From_Email__c</columns>
+    <columns>MC4SF__Subject__c</columns>
+    <columns>MC4SF__Send_Time__c</columns>
+    <columns>MC4SF__MC_List__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
+</ListView>

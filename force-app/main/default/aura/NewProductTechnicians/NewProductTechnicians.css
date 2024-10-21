@@ -1,0 +1,25 @@
+.THIS .whiteIcon svg {
+    fill: white;
+}
+
+.THIS .borderTd{
+    border-right: 3px solid #fafaf9;
+}
+
+.THIS .bgSelected {
+    background-color: #dbdbdb;
+}
+
+.THIS .color-red {color: red;}
+
+.THIS .slds-rich-text-editor__toolbar {
+    display: none;
+}
+
+.THIS body {
+    background-color: white!important;
+}
+
+.THIS .clickable tr{
+    cursor:pointer;
+}

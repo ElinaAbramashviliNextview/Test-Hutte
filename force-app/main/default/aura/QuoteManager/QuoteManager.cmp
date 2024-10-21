@@ -1,0 +1,736 @@
+<aura:component controller="QuoteManagerController" implements="force:appHostable,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,flexipage:availableForAllPageTypes" access="global">
+
+	<!-- INCLUDE -->
+	<ltng:require scripts="{!$Resource.LightningNotifications + '/js/common.js'}"/>
+
+	<!-- HANDLERS -->
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+	<!-- ATTRIBUTTES -->
+    <aura:attribute name="isReady" type="Boolean" default="false"/>
+	<aura:attribute name="isLoading" type="Boolean" default="true" />
+
+	<aura:attribute name="isModalOpen" type="Boolean" default="false"/>
+
+	<aura:attribute name="recordId" type="String"/>
+	<aura:attribute name="quoteMdl" type="Object"/>
+	<aura:attribute name="quoteMdlView" type="Object"/>
+
+	<aura:attribute name="modalType" type="String" default=""/>
+
+	<aura:attribute name="isEdited" type="Boolean" default="false"/>
+
+	<aura:attribute name="sltProdId" type="String"/>
+	<aura:attribute name="sltProdFam" type="String"/>
+	<aura:attribute name="tmpParentId" type="Integer" default="0"/>
+	<aura:attribute name="tmpChildId" type="Integer" default="0"/>
+	<aura:attribute name="tmpDescriptionId" type="Integer" default="0"/>
+
+	<aura:attribute name="descToShow" type="String"/>
+	<aura:attribute name="qliDescs" type="Object[]" default="[]"/>
+
+	<!-- Edit -->
+	<aura:attribute name="sltMatId" type="String"/>
+	<aura:attribute name="sltMatSpec" type="String"/>
+	<aura:attribute name="editMat" type="Object"/>
+	<aura:attribute name="editParentId" type="String"/>
+
+	<aura:attribute name="delRecs" type="Object[]" default="[]"/>
+	<aura:attribute name="delId" type="String"/>
+	<aura:attribute name="delOptId" type="String"/>
+	<aura:attribute name="delParentOptId" type="String"/>
+
+	<aura:attribute name="constProduct" type="String" default="V-VYROBEK"/>
+	<aura:attribute name="constWareServ" type="String" default="S-SKLADOVE SLUZBY"/>
+	<aura:attribute name="constServices" type="String" default="S-SLUZBY"/>
+	<aura:attribute name="constGoods" type="String" default="Z-ZBOZI"/>
+
+	<aura:attribute name="transportCost" type="Object" default="{}"/>
+
+	<aura:attribute name="productById" type="Object"/>
+
+	<lightning:spinner variant="brand" size="small" class="{!if(v.isLoading, '','slds-hide')}" alternativeText="Loader"/>
+	<aura:if isTrue="{!v.isReady}">
+		<aura:if isTrue="{!!v.quoteMdlView.qt.Opportunity.IsClosed}">
+			<aura:if isTrue="{!!v.quoteMdlView.quoteIsLocked}">
+				<aura:if isTrue="{!!v.quoteMdlView.qt.IsApproved__c}">
+					<div class="body">
+						<!-- HEADER -->
+						<aura:if isTrue="{!v.quoteMdlView.isQuotedPrinted}">
+							<div style="text-align:center; font-size: 20px; background-color:orange">Quote is locked for edit.</div>
+						</aura:if>
+						<div class="slds-page-header slds-page-header_record-home">
+							<div class="slds-page-header__row">
+								<div class="slds-page-header__col-title">
+									<div class="slds-media">
+										<div class="slds-media__figure">
+											<lightning:icon iconName="standard:opportunity" alternativeText="Opportunity"/>
+										</div>
+										<div class="slds-media__body">
+											<div class="slds-page-header__name">
+												<div class="slds-page-header__name-title">
+													<h1>
+														<span class="slds-text-title_caps">Line Manager</span>
+														<span class="slds-page-header__title slds-truncate">{!v.quoteMdlView.qt.Name}</span>
+														<span >{!v.quoteMdlView.qt.Pricebook2.Name}</span>
+													</h1>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="slds-page-header__col-actions">
+									<div class="slds-page-header__controls">
+										<div class="slds-page-header__control">
+											<ul class="slds-button-group-list">
+												<li>
+													<button class="slds-button slds-button_neutral" onclick="{!c.showProdMod}">
+														<lightning:icon iconName="utility:add" size="x-small"/>&nbsp;Add Product
+													</button>
+												</li>
+												<li>
+													<button class="slds-button slds-button_neutral" onclick="{!c.editTransport}">
+														<lightning:icon iconName="utility:travel_and_places" size="x-small"/>&nbsp;Transport
+													</button>
+												</li>
+												<li>
+													<button class="slds-button slds-button_brand" onclick="{!c.saveQuote}" disabled="{!if(v.quoteMdlView.isQuotedPrinted,'disabled','')}">
+														<lightning:icon class="whiteIcon" iconName="utility:check" size="x-small"/>&nbsp;Save
+													</button>
+												</li>
+												<li>
+													<button class="slds-button slds-button_neutral" onclick="{!c.backBtn}">Back</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="slds-page-header__row slds-page-header__row_gutters">
+								<div class="slds-page-header__col-details">
+									<div class="sxc-maxDiscount">
+										<div class="slds-text-title slds-truncate" title="Maximum Allowed Discount for the Quote">Maximum Allowed Discount for the Quote</div>
+										<div class="slds-truncate">{!v.quoteMdlView.accountDiscount}%</div>
+									</div>
+									<!--<ul class="slds-page-header__detail-row">
+										<li class="slds-page-header__detail-block">
+											<div class="slds-text-title slds-truncate" title="Maximum Allowed Discount">Maximum Allowed Discount</div>
+											<div class="slds-truncate">50%</div>
+										</li>
+									</ul>-->
+								</div>
+							</div>
+						</div>
+						<table class="slds-table slds-table_cell-buffer slds-table_bordered height-fix" style="width:100%">
+							<thead>
+								<!-- Table Head --> 
+								<tr class="slds-line-height_reset">
+									<th scope="col" width="1%">
+										<div class="slds-text-title_caps" title="Visible in PDF">Visible in PDF</div>
+									</th>
+									<th scope="col" width="1%"></th>
+									<th scope="col" width="1%"></th>
+									<th scope="col" width="34%">
+										<div class="slds-truncate slds-text-title_caps" title="Product Name">Product Name</div>
+									</th>
+									<th scope="col" width="9%">
+										<div class="slds-truncate slds-text-title_caps" title="Description">Description</div>
+									</th>
+									<th scope="col" width="7%">
+										<div class="slds-truncate slds-text-title_caps" title="List Price">List Price</div>
+									</th>
+									<th scope="col" width="7%">
+										<div class="slds-truncate slds-text-title_caps" title="Unit Price">Unit Price</div>
+									</th>
+									<th scope="col" width="7%">
+										<div class="slds-truncate slds-text-title_caps" title="Quantity">Quantity</div>
+									</th>
+									<th scope="col" width="4%">
+										<div class="slds-truncate slds-text-title_caps" title="UM">UM</div>
+									</th>
+									<th scope="col" width="7%">
+										<div class="slds-truncate slds-text-title_caps" title="Discount">Discount</div>
+									</th>
+									<th scope="col" width="7%">
+										<div class="slds-truncate slds-text-title_caps" title="Total Dis.">Total Dis.</div>
+									</th>
+									<th scope="col" width="7%">
+										<div class="slds-truncate slds-text-title_caps" title="Total Price">Total Price</div>
+									</th>
+									<th width="1%"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- Parent  -->
+								<aura:iteration items="{!v.quoteMdlView.qlis}" var="qli">
+									<aura:if isTrue="{!!qli.qliParent.RelatedOptionalEquipment__c}">
+										<!-- bgcolor="#f0f0f0" -->
+										<tr class="slds-line-height_reset" bgcolor="#e6e6e6">
+											<td scope="col">
+												<aura:if isTrue="{!qli.qliParent.PricebookEntry.Product2.Type__c == v.constProduct}">
+													<lightning:input type="checkbox" checked="{!qli.qliParent.IsShowInQuotePDF__c}"/>
+												</aura:if>
+											</td>
+											<td scope="col">
+												<div onclick="{!c.moveUp}" data-btn-id="{!qli.qliParent.Id}">
+													<lightning:buttonIcon iconName="utility:arrowup" variant="border-filled"/>
+												</div>
+												<div onclick="{!c.moveDown}" data-btn-id="{!qli.qliParent.Id}">
+													<lightning:buttonIcon iconName="utility:arrowdown" variant="border-filled"/>
+												</div>
+											</td>
+											<td scope="col">
+												<aura:if isTrue="{!if(or(qli.qliParent.PricebookEntry.Product2.Type__c == v.constServices, qli.qliParent.PricebookEntry.Product2.Type__c == v.constGoods), true, false)}">
+													<div onclick="{!c.addOptional}" data-btn-id="{!qli.qliParent.Id}">
+														<lightning:buttonIcon iconName="utility:chevronright" variant="border-filled"/>	
+													</div>
+												</aura:if>
+											</td>
+											<td scope="col">
+												<div class="slds-truncate">{!qli.qliParent.PricebookEntry.Product2.BusinessName__c}</div>
+											</td>
+											<td scope="col">
+												<button class="slds-button slds-truncate fix-width" onclick="{!c.showDesc}" data-row-id="{!qli.qliParent.Id}">Show Description</button>
+											</td>
+											<td scope="col">
+												<div class="slds-truncate input-right">
+													{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!qli.qliParent.ListPrice}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+												</div>
+											</td>
+											<td scope="col">
+												<input oninput="{!c.changeValue}" onblur="{!c.rounding}" data-row-id="{!qli.qliParent.Id}" data-type="unit" value="{!qli.qliParent.UnitPrice__c}" type="number" class="input-right slds-input"/>
+											</td>
+											<td scope="col">
+												<div class="slds-truncate" onchange="{!c.changeValue}" data-row-id="{!qli.qliParent.Id}">
+													<lightning:input value="{!qli.qliParent.Quantity}" type="number" class="input-right" variant="label-hidden" min="1"/>
+												</div>
+											</td>
+											<td scope="col">
+												<div class="slds-truncate">{!qli.qliParent.QuantityUnitOfMeasure__c}</div>
+											</td>
+											<td scope="col">
+												<div class="slds-truncate" onchange="{!c.changeValue}" data-row-id="{!qli.qliParent.Id}" data-type="discount">
+													<lightning:input value="{!qli.qliParent.TmpRowDiscount}" type="number" class="input-right" variant="label-hidden" maximumFractionDigits="2" minimumFractionDigits="0" step="0.01"/>
+												</div>	
+											</td>
+											<td scope="col">
+												<div class="{!if(qli.qliParent.TmpRowDiscount > v.quoteMdlView.accountDiscount, 'slds-truncate textRed', 'slds-truncate')}">
+													<lightning:formattedNumber value="{!qli.qliParent.RowTotalDiscount__c}" maximumFractionDigits="2" minimumFractionDigits="0"/>%
+												</div>
+											</td>
+											<td scope="col">
+												<div class="slds-truncate input-right">
+													{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!qli.qliParent.RowTotalPrice__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>		
+												</div>
+											</td>
+											<td>
+												<div onclick="{!c.deleteItem}" data-btn-id="{!qli.qliParent.Id}">
+													<lightning:buttonIcon iconName="utility:delete" variant="bare" iconClass="color-red"/>
+												</div>
+											</td>
+										</tr>
+										<!-- Child -->
+										<aura:if isTrue="{!qli.qliChilds.length > 0}">
+											<aura:iteration items="{!qli.qliChilds}" var="child">
+												<aura:if isTrue="{!child.IsVisible__c &amp;&amp; child.Product2Id__r.Specification__c != '10' &amp;&amp; child.Product2Id__r.Specification__c != '11'}">
+													<tr class="slds-line-height_reset" style="height:15px">
+														<td scope="col"></td>
+														<td scope="col"></td>
+														<td scope="col"></td>
+														<aura:if isTrue="{!v.quoteMdl.qt.Language__c == 'cs'}">
+															<td scope="col">
+																<div class="slds-truncate slds-m-left_large">{!child.Product2Id__r.BusinessName__c} </div>
+															</td>
+														</aura:if>
+														<aura:if isTrue="{!v.quoteMdl.qt.Language__c == 'en_US'}">
+															<td scope="col">
+																<div class="slds-truncate slds-m-left_large">{!child.Product2Id__r.BusinessNameEN__c}</div>
+															</td>
+														</aura:if>
+														<aura:if isTrue="{!v.quoteMdl.qt.Language__c == 'cs'}">
+															<td scope="col">
+																<div class="slds-truncate"><lightning:formattedRichText value="{!child.ProductDescriptionCZ__c}"/></div>
+															</td>
+														</aura:if>
+														<aura:if isTrue="{!v.quoteMdl.qt.Language__c == 'en_US'}">
+															<td scope="col">
+																<div class="slds-truncate"><lightning:formattedRichText value="{!child.ProductDescriptionEN__c}"/></div>
+															</td>
+														</aura:if>
+														<td scope="col"></td>
+														<td scope="col"></td>
+														<td scope="col">
+															<div class="slds-truncate">
+																<lightning:input class="input-right" readonly="true" variant="label-hidden" value="{!child.Quantity__c}"/>											
+															</div>
+														</td>
+														<td scope="col">
+															<div class="slds-truncate">{!child.QuantityUnitOfMeasure__c}</div>
+														</td>
+														<td scope="col"></td>
+														<td scope="col">
+															<div class="slds-truncate"></div>
+														</td>
+														<td scope="col"></td>
+														<td>
+															<aura:if isTrue="{!child.IsEditable__c}">
+																<div onclick="{!c.editItem}" data-prod-id="{!child.Product2Id__c}" data-parent-id="{!qli.qliParent.Id}">
+																	<lightning:buttonIcon iconName="utility:settings" variant="bare" />
+																</div>
+															</aura:if>
+														</td>
+													</tr>
+												</aura:if>
+											</aura:iteration>
+										</aura:if>
+										<!-- Optional -->
+										<aura:iteration items="{!v.quoteMdlView.qlis}" var="opt">
+											<aura:if isTrue="{!qli.qliParent.Id == opt.qliParent.RelatedOptionalEquipment__c}">
+												<!-- bgcolor="#fafafa" -->
+												<tr class="slds-line-height_reset" bgcolor="#f0f0f0">
+													<td scope="col"></td>
+													<td scope="col">
+														<div onclick="{!c.removeOptional}" data-opt-id="{!opt.qliParent.Id}" data-parent-id="{!qli.qliParent.Id}">
+															<lightning:buttonIcon iconName="utility:chevronleft" variant="border-filled"/>
+														</div>
+													</td>
+													<td scope="col"></td>
+													<td scope="col">
+														<div class="slds-truncate">{!opt.qliParent.PricebookEntry.Product2.BusinessName__c}</div>
+													</td>
+													<td scope="col">
+														<button class="slds-button slds-truncate fix-width" onclick="{!c.showDesc}" data-row-id="{!opt.qliParent.Id}">Show Description</button>
+													</td>
+													<td scope="col">
+														<div class="slds-truncate input-right">
+															{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!opt.qliParent.ListPrice}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+														</div>
+													</td>
+													<td scope="col">
+														<input oninput="{!c.changeValue}" onblur="{!c.rounding}" data-row-id="{!opt.qliParent.Id}" data-type="unit" value="{!opt.qliParent.UnitPrice__c}" type="number" class="input-right slds-input"/>
+													</td>
+													<td scope="col">
+														<div class="slds-truncate" onchange="{!c.changeValue}" data-row-id="{!opt.qliParent.Id}">
+															<lightning:input value="{!opt.qliParent.Quantity}" type="number" class="input-right" variant="label-hidden" min="1"/>
+														</div>
+													</td>
+													<td scope="col">
+														<div class="slds-truncate">{!opt.qliParent.QuantityUnitOfMeasure__c}</div>
+													</td>
+													<td scope="col">
+														<div class="slds-truncate" onchange="{!c.changeValue}" data-row-id="{!opt.qliParent.Id}" data-type="discount">
+															<lightning:input value="{!opt.qliParent.TmpRowDiscount}" type="number" class="input-right" variant="label-hidden" maximumFractionDigits="2" minimumFractionDigits="0" step="0.01"/>
+														</div>	
+													</td>
+													<td scope="col">
+														<div class="{!if(opt.qliParent.TmpRowDiscount > v.quoteMdlView.accountDiscount, 'slds-truncate textRed', 'slds-truncate')}">
+															<lightning:formattedNumber value="{!opt.qliParent.RowTotalDiscount__c}" maximumFractionDigits="2" minimumFractionDigits="0"/>%
+														</div>
+													</td>
+													<td scope="col">
+														<div class="slds-truncate input-right">
+															{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!opt.qliParent.RowTotalPrice__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>		
+														</div>
+													</td>
+													<td>
+														<div onclick="{!c.deleteItem}" data-btn-id="{!opt.qliParent.Id}">
+															<lightning:buttonIcon iconName="utility:delete" variant="bare" iconClass="color-red"/>
+														</div>
+													</td>
+												</tr>
+											</aura:if>
+										</aura:iteration>
+									</aura:if>
+								</aura:iteration>
+							</tbody>
+						</table>
+						<!-- Quote Totals & Subtotals -->
+						<div class="slds-clearfix">
+							<div class="slds-grid slds-gutters">
+								<div class="slds-col slds-size_2-of-4"></div>
+								<div class="slds-col slds-size_1-of-4 slds-m-top_small">
+									<label class="slds-text-title_caps slds-text-align_right">Discount Reason:</label>
+									<lightning:inputRichText value="{!v.quoteMdlView.qt.DiscountReason__c}" class="richTextFix slds-m-top_small" variant="brand" disabledCategories="FORMAT_FONT,FORMAT_TEXT,FORMAT_BODY,ALIGN_TEXT,INSERT_CONTENT,REMOVE_FORMATTING"/>
+								</div>
+								<div class="slds-col slds-size_1-of-4">
+									<div class="slds-float_right">
+										<table class="slds-m-top_small">
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">
+													Subtotal:&nbsp;
+												</td>
+												<td class="slds-text-align_right">
+													{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!v.quoteMdlView.qt.Subtotal__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>	
+												</td>
+											</tr>
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">
+													Quote Discount (%):&nbsp;
+												</td>
+												<td class="slds-text-align_right">
+													<div class="slds-truncate" onchange="{!c.changeValue}" data-row-id="null">
+														<lightning:input type="number" name="quoteDiscount" variant="label-hidden" value="{!v.quoteMdlView.qt.QuoteDiscount__c}" class="input-right" step="0.01" min="0" maximumFractionDigits="2" minimumFractionDigits="0"/>
+													</div>
+												</td>
+											</tr>
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">
+													Quote Discount Value ({!v.quoteMdlView.qt.CurrencyIsoCode}):&nbsp;
+												</td>
+												<td class="slds-text-align_right">
+													<input style="text-align:right" oninput="{!c.changeValue}" onblur="{!c.roundQTDisc}" data-row-id="null" data-change-type="qtDiscVal" value="{!v.quoteMdlView.qt.QuoteDiscountValue__c}" type="number" class="input-right slds-input"/>
+												</td>
+											</tr>
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">
+													Total Discount:&nbsp;
+												</td>
+												<td class="slds-text-align_right">
+													<lightning:formattedNumber value="{!v.quoteMdlView.qt.QuoteTotalDiscount__c}" maximumFractionDigits="2" minimumFractionDigits="0"/>%
+												</td>
+											</tr>
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">Transport Total Price</td>
+												<td class="slds-text-align_right">
+													{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!v.quoteMdlView.qliTransport.RowTotalPrice__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+												</td>
+											</tr>
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">
+													Total Price:&nbsp;		
+												</td>
+												<td class="slds-text-align_right">
+													{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!v.quoteMdlView.qt.TotalPrice__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>					
+												</td>
+											</tr>
+											<tr class="spaceUnder">
+												<td class="slds-text-title_caps slds-text-align_right">
+													Project Fee:&nbsp;
+												</td>
+												<td class="slds-text-align_right">
+													<lightning:formattedNumber value="{!v.quoteMdlView.qt.ProjectSalesFee__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>%					
+													CZK&nbsp;<lightning:formattedNumber value="{!v.quoteMdlView.qt.ProjectSalesFeeValue__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>					
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>	
+							</div>
+						</div>
+
+						<!-- POPUP -->
+						<section aura:id="rowOptionsDialog" role="dialog" tabindex="-1" class="{!'slds-modal' + if(v.isModalOpen,' slds-fade-in-open','')}">
+
+							<!-- EDIT -->
+							<aura:if isTrue="{!v.modalType == 'edit'}">
+								<div class="slds-modal__container">
+									<div class="slds-is-relative">
+							
+										<!-- MODAL HEADER -->
+										<header class="slds-modal__header">
+											<lightning:buttonIcon iconName="utility:close" variant="neutral" class="slds-modal__close" title="Close" alternativeText="Close" onclick="{!c.closeMod}"/>
+											<div class="slds-grid">
+												<div class=" slds-col">
+													<!--<lightning:icon iconName="utility:edit" class="slds-float_left" size="small"/>-->
+													<h2 class="slds-text-heading_medium slds-hyphenate">Edit Item</h2>
+												</div>
+											</div>
+										</header>
+
+										<!-- MODAL CONTENT -->
+										<div class="slds-modal__content">
+											<div class="slds-form slds-form_stacked slds-p-around_small">
+												<div class="slds-form-element slds-grid">
+													<div class="slds-size_1-of-1 slds-m-bottom_small">
+														<aura:iteration items="{!v.quoteMdlView.specPicklist}" var ="spp">
+															<aura:if isTrue="{!spp.value == v.sltMatSpec}">
+																<lightning:input type="text" readonly="true" label="Specification" value="{!spp.label}"/>
+															</aura:if>
+														</aura:iteration>
+													</div>
+												</div>
+												<!--<div>
+													<lightning:select  readonly="true" name="specification" label="Specification" value="{!v.sltMatSpec}" class="slds-size_1-of-1 slds-m-bottom_small">
+														<aura:iteration items="{!v.quoteMdlView.specPicklist}" var="spp">
+															<option value="{!spp.value}">{!spp.label}</option>
+														</aura:iteration>
+													</lightning:select>
+												</div>-->
+												<div class="slds-form-element slds-grid">
+													<div class="slds-size_1-of-1 slds-m-bottom_small">
+														<c:UIInputLookup key="productLookup"
+															label="Select"
+															placeholder="Product" 
+															value="{!v.sltMatId}"
+															sobject="Product2" 
+															findBy="['Name']" 
+															fields="['Id', 'Name', 'Type__c']"
+															displayFields="['Name', 'BusinessName__c']" 
+															icon="standard:product" 
+															iconClass="slds-icon-standard-product"
+															required="true"
+															showRecent = "false"
+															andClause="{!'Type__c =\''+v.editMat.Product2.Type__c+'\' AND Specification__c = \''+v.sltMatSpec+'\''}"
+															disabled="{!if(v.sltMatSpec == '0', true, false)}"
+														/>
+													</div>
+												</div>
+												<div class="dropDownFix">
+													&nbsp;
+												</div>						
+											</div>
+										</div>
+
+										<!-- MODAL FOOTER -->
+										<footer class="slds-modal__footer">
+											<lightning:button variant="neutral" label="Cancel" onclick="{!c.closeMod}" class="slds-m-left_medium" />
+											<lightning:button variant="brand" label="Save" onclick="{!c.editMaterial}" class="slds-m-left_medium" />
+										</footer>
+									</div>
+								</div>
+							</aura:if>
+			
+							<!-- DELETE -->
+							<aura:if isTrue="{!v.modalType == 'delete'}">
+								<div class="slds-modal__container">
+									<div class="slds-is-relative">
+							
+										<!-- MODAL HEADER -->
+										<header class="slds-modal__header">
+											<lightning:buttonIcon iconName="utility:close" variant="neutral" class="slds-modal__close" title="Close" alternativeText="Close" onclick="{!c.closeMod}"/>
+											<div class="slds-grid">
+												<div class=" slds-col">
+													<!--<lightning:icon iconName="utility:delete" class="slds-float_left" size="small"/>-->
+													<h2 class="slds-text-heading_medium slds-hyphenate">Delete Item</h2>
+												</div>
+											</div>
+										</header>
+
+										<!-- MODAL CONTENT -->
+										<div class="slds-modal__content">
+											<div class="slds-form slds-form_stacked slds-p-around_small">
+												<div class="slds-form-element slds-grid">
+													<div class="slds-size_1-of-1 slds-m-bottom_small">
+														<span>Do you want to delete this item?</span>
+													</div>
+												</div>						
+											</div>
+										</div>
+
+										<!-- MODAL FOOTER -->
+										<footer class="slds-modal__footer">
+											<lightning:button variant="neutral" label="Cancel" onclick="{!c.closeMod}" class="slds-m-left_medium" />
+											<lightning:button variant="brand" label="Delete" onclick="{!c.deleteRec}" class="slds-m-left_medium" />
+										</footer>
+									</div>
+								</div>
+							</aura:if>
+
+							<!-- SHOW DESCRIPTIONS -->
+							<aura:if isTrue="{!v.modalType == 'showDesc'}">
+								<div class="slds-modal__container">
+									<div class="slds-is-relative">
+							
+										<!-- MODAL HEADER -->
+										<header class="slds-modal__header">
+											<lightning:buttonIcon iconName="utility:close" variant="neutral" class="slds-modal__close" title="Close" alternativeText="Close" onclick="{!c.closeMod}"/>
+											<div class="slds-grid">
+												<div class=" slds-col">
+													<!--<lightning:icon iconName="utility:delete" class="slds-float_left" size="small"/>-->
+													<h2 class="slds-text-heading_medium slds-hyphenate">Description</h2>
+												</div>
+											</div>
+										</header>
+
+										<!-- MODAL CONTENT -->
+										<div class="slds-modal__content">
+											<div class="slds-form slds-form_stacked slds-p-around_small">
+												<div class="slds-form-element slds-grid">
+													<div class="slds-size_1-of-1 slds-m-bottom_small">
+														<lightning:formattedRichText value="{!v.descToShow}" />
+														<table style="border-collapse:separate; border-spacing:0 5px;">
+															<aura:iteration items="{!v.qliDescs}" var="desc">
+																<tr>
+																	<td width="20%">{!desc.title}</td>
+																	<td><lightning:formattedRichText value="{!desc.description}" /></td>
+																</tr>
+															</aura:iteration>
+														</table>
+													</div>
+												</div>						
+											</div>
+										</div>
+
+										<!-- MODAL FOOTER -->
+										<footer class="slds-modal__footer">
+											<lightning:button variant="brand" label="Close" onclick="{!c.closeMod}" class="slds-m-left_medium" />
+										</footer>
+									</div>
+								</div>
+							</aura:if>
+
+							<!-- ADD PRODUCT -->
+							<aura:if isTrue="{!v.modalType == 'addProduct'}">
+							<div class="slds-modal__container modal-container-width">
+								<div class="slds-is-relative">
+									<c:productConfigurator
+											aura:id="productConfigurator"
+											oncloseprodmodal="{!c.closeMod}"
+									></c:productConfigurator>
+								</div>
+							</div>
+							</aura:if>
+
+							<!-- EDIT TRANSPORT -->
+							<aura:if isTrue="{!v.modalType == 'transport'}">
+								<div class="slds-modal__container">
+									<div class="slds-is-relative">
+							
+										<!-- MODAL HEADER -->
+										<header class="slds-modal__header">
+											<lightning:buttonIcon iconName="utility:close" variant="neutral" class="slds-modal__close" title="Close" alternativeText="Close" onclick="{!c.closeMod}"/>
+											<div class="slds-grid">
+												<div class=" slds-col">
+													<lightning:icon iconName="utility:travel_and_places" class="slds-float_left" size="small"/>
+													<h2 class="slds-text-heading_medium slds-hyphenate">Edit Transport</h2>
+												</div>
+											</div>
+										</header>
+
+										<!-- MODAL CONTENT -->
+										<div class="slds-modal__content" style="padding:10px 0 10px 0">
+											<table class="slds-table slds-table_cell-buffer slds-table_bordered height-fix" style="width:100%">
+												<thead>
+													<tr class="slds-line-height_reset" bgcolor="#fafaf9">
+														<th width="20%"></th>
+														<th scope="col" width="30%" class="slds-text-align_left">Item</th>
+														<!--<th scope="col" width="20%" class="slds-text-align_center">Cost</th>-->
+														<th scope="col" width="30%" class="slds-text-align_right">Selling Price</th>
+														<th width="20%"></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td></td>
+														<td>Shipping</td>
+														<!--<td>
+															<lightning:input onchange="{!c.changeTransport}" value="{!v.quoteMdlView.qliTransport.TC_ShippingCost__c}" type="number" class="input-right"/>
+														</td>-->
+														<td>
+															<div class="slds-text-align_right">
+																<lightning:input onchange="{!c.changeTransport}" value="{!v.transportCost.shipping}" type="number" class="input-right"/>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td>Material Shipping</td>
+														<!--<td>
+															<lightning:input onchange="{!c.changeTransport}" value="{!v.quoteMdlView.qliTransport.TC_MaterialShippingCost__c}" type="number" class="input-right"/>
+														</td>-->
+														<td>
+															<div class="slds-truncate slds-text-align_right">
+																<lightning:input onchange="{!c.changeTransport}" value="{!v.transportCost.matShipping}" type="number" class="input-right"/>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td>Assembly</td>
+														<!--<td>
+															<lightning:input onchange="{!c.changeTransport}" value="{!v.quoteMdlView.qliTransport.TC_AssemblyCost__c}" type="number" class="input-right"/>
+														</td>-->
+														<td>
+															<div class="slds-truncate slds-text-align_right">
+																<lightning:input onchange="{!c.changeTransport}" value="{!v.transportCost.assembly}" type="number" class="input-right"/>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td>Accomodation</td>
+														<!--<td>
+															<lightning:input onchange="{!c.changeTransport}" value="{!v.quoteMdlView.qliTransport.TC_AccommodationCost__c}" type="number" class="input-right"/>
+														</td>-->
+														<td>
+															<div class="slds-truncate slds-text-align_right">
+																<lightning:input onchange="{!c.changeTransport}" value="{!v.transportCost.accommodation}" type="number" class="input-right"/>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td>Free Shipping</td>
+														<td>
+															<div class="slds-truncate slds-text-align_right">
+																<lightning:input type="checkbox" aura:id="freeShippingBox" checked="{!v.transportCost.isFreeShipping}" onchange="{!c.changeTransport}" />
+															</div>
+														</td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+											<table class="slds-table slds-table_cell-buffer slds-table_bordered height-fix" style="width:100%">
+												<tbody>
+													<tr>
+														<td Width="20%"></td>
+														<!--<td width="20%"><b>Total Cost:&nbsp;</b></td>
+														<td width="25%" class="slds-text-align_right">
+															{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!v.transportCost.rowTotalWithoutIndex}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+														</td>
+														<td width="10%">&nbsp;</td>-->
+														<td width="30%"><b>Total Selling Price:&nbsp;</b></td>
+														<td width="30%" class="slds-text-align_right">
+															{!v.quoteMdlView.qt.CurrencyIsoCode}&nbsp;<lightning:formattedNumber value="{!v.quoteMdlView.qliTransport.RowTotalPrice__c}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+														</td>
+														<td width="20%"></td>
+													</tr>
+												</tbody>
+											</table>
+
+											<table class="slds-table slds-m-top_small" style="width:100%">
+												<tr>
+													<td width="20%"></td>
+													<td width="10%"><b>Ship To:</b></td>
+													<td Width="50%">{!v.quoteMdlView.qt.ShippingStreet + ', ' + v.quoteMdlView.qt.ShippingCity + ' ' + v.quoteMdlView.qt.ShippingPostalCode}</td>
+													<td width="20%"></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td>&nbsp;</td>
+													<td>{!v.quoteMdlView.qt.ShippingCountry}</td>
+													<td></td>
+												</tr>
+											</table>
+										</div>
+
+										<!-- MODAL FOOTER -->
+										<footer class="slds-modal__footer">
+											<lightning:button variant="brand" label="OK" onclick="{!c.closeMod}" class="slds-m-left_medium" />
+											<lightning:button variant="neutral" label="Reset" onclick="{!c.resetTransport}" class="slds-m-left_medium" />
+										</footer>
+									</div>
+								</div>
+							</aura:if>
+
+						</section>
+						<div class="{!'slds-backdrop' + if(v.isModalOpen,' slds-backdrop_open','')}"></div>
+					</div>
+				<aura:set attribute="else">
+					<div style="text-align:center; font-size: 20px; background-color:lightgray">This Quote was Approved</div>
+				</aura:set>
+				</aura:if>
+			<aura:set attribute="else">
+				<div style="text-align:center; font-size: 20px; background-color:lightgray">This Quote is in Approval Process. If you want to edit it click on Recall button in Approval History section.</div>
+			</aura:set>
+			</aura:if>
+		<aura:set attribute="else">
+			<div style="text-align:center; font-size: 20px; background-color:lightgray">You can not edit this Quote, because Opportunity is in stage {!v.quoteMdlView.qt.Opportunity.StageName}.</div>
+		</aura:set>
+		</aura:if>
+	</aura:if>
+</aura:component>

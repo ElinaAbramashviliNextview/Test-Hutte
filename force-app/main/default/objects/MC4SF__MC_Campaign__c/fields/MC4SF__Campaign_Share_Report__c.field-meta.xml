@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Campaign_Share_Report__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>HYPERLINK(
+	IF(ISBLANK(MC4SF__Report_Secure_URL__c), MC4SF__Report_URL__c, MC4SF__Report_Secure_URL__c),  
+	IF(ISBLANK(MC4SF__Report_Secure_URL__c), MC4SF__Report_URL__c, MC4SF__Report_Secure_URL__c), 
+	&quot;_self&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Campaign Share Report</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

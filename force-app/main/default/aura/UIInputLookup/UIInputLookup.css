@@ -1,0 +1,19 @@
+.THIS .sxc-highlight{font-weight: bold;background: rgba(255, 215, 0, 0.21);}
+.THIS .sxc-list-thumb{height: 28px; width: 28px; border-radius: 3px;}
+.THIS .sxc-help-icon{margin-top: -4px;} /* fix icon position */
+.THIS .sxc-scroller {max-height: 200px; overflow-y: auto; overflow-x:hidden;}
+.THIS .sxc-no-records .slds-media__body{padding-top: 7px;}
+.THIS .sxc-click-area{position:absolute; z-index: 1; top:0; left:0; right:0; bottom:0; cursor: pointer; border: 0; box-shadow: none;}
+.THIS .sxc-user-alias{color:#999;}
+/* SLDS Fixes */
+.THIS .slds-input.slds-combobox__input{height: 31.6px;}
+.THIS .slds-media {align-items: center!important;}
+.THIS .slds-media__figure{margin-top:0!important;}
+.THIS .slds-media__body{line-height: 19px;}
+.THIS .slds-input-has-icon_left-right .slds-input {
+	/*
+	salesforce's app.css overrides its own slds defs. 
+	this rule reapplies their style for lookup with both left and right icon
+	*/
+	padding-left: 2rem;
+}

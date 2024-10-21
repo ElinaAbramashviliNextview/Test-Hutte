@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OppSyncLastRun__c</fullName>
+    <description>Datetime of last successful run of opportunity CSV Export. This date will be used as threshold for next run.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Datetime of last successful run of opportunity CSV Export. This date will be used as threshold for next run.</inlineHelpText>
+    <label>Opp Sync Last Run</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

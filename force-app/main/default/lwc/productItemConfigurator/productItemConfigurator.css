@@ -1,0 +1,4 @@
+.product-item-configurator-height{
+  overflow-y: scroll;
+  height: 60vh;
+}

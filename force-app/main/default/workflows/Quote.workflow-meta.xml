@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Free_Shipping_Notification_And_Verification_Request</fullName>
+        <description>Free Shipping Notification And Verification Request</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>jan.kanka@silent-lab.cz</recipient>
+            <type>user</type>
+        </recipients>
+        <recipients>
+            <recipient>jaroslav.vendl@silent-lab.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Free_Shipping_Verification_Request</template>
+    </alerts>
+    <alerts>
+        <fullName>QuoteApprove</fullName>
+        <description>Quote Approve</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/QuoteApprove</template>
+    </alerts>
+    <alerts>
+        <fullName>QuoteReject</fullName>
+        <description>Quote Reject</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/QuoteReject</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>CheckIsApproved</fullName>
+        <field>IsApproved__c</field>
+        <literalValue>1</literalValue>
+        <name>Check Is Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>CheckIsRecall</fullName>
+        <field>IsRecall__c</field>
+        <literalValue>1</literalValue>
+        <name>Check Is Recall</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Check_Is_Approved</fullName>
+        <field>IsApproved__c</field>
+        <literalValue>1</literalValue>
+        <name>Check Is Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>QuoteStatusApproved</fullName>
+        <field>Status</field>
+        <literalValue>Approved</literalValue>
+        <name>Quote Status Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>QuoteStatusNew</fullName>
+        <field>Status</field>
+        <literalValue>New</literalValue>
+        <name>Quote Status New</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quote_Need_Approval_Update</fullName>
+        <field>NeedApprove__c</field>
+        <literalValue>1</literalValue>
+        <name>Quote Need Approval Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quote_Status_Approved</fullName>
+        <field>Status</field>
+        <literalValue>Approved</literalValue>
+        <name>Quote Status Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Quote_Status_Update</fullName>
+        <field>Status</field>
+        <literalValue>For Approve</literalValue>
+        <name>Quote Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>UncheckIsApproved</fullName>
+        <field>IsApproved__c</field>
+        <literalValue>0</literalValue>
+        <name>Uncheck Is Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>UncheckNeedApprove</fullName>
+        <field>NeedApprove__c</field>
+        <literalValue>0</literalValue>
+        <name>Uncheck Need Approve</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

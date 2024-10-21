@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Accounts_Sync_Error</fullName>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>CORE.USERS.FIRST_NAME</columns>
+    <columns>CORE.USERS.LAST_NAME</columns>
+    <columns>VatNo__c</columns>
+    <columns>TaxNo__c</columns>
+    <columns>CREATEDBY_USER.ALIAS</columns>
+    <columns>ACCOUNT.CREATED_DATE</columns>
+    <columns>ACCOUNT.LAST_UPDATE</columns>
+    <columns>IsValidated__c</columns>
+    <columns>AccountEId__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>SyncStatus__c</field>
+        <operation>equals</operation>
+        <value>ERROR</value>
+    </filters>
+    <label>Accounts - Sync Error</label>
+</ListView>

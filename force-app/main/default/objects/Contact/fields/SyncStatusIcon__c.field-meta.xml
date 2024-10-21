@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SyncStatusIcon__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(IsPickVal(SyncStatus__c,&apos;SYNCING&apos;), 
+IMAGE(&quot;/img/loading32.gif&quot;, &quot;SYNCING&quot;,16,16), 
+IF(IsPickVal(SyncStatus__c,&apos;HOLD&apos;), 
+IMAGE(&quot;/img/permissions_deny16.gif&quot;, &quot;HOLD&quot;,16,16), 
+
+/* ELSE: */ 
+IF(ISPICKVAL(SyncStatus__c , &apos;SUCCESS&apos;), IMAGE(&apos;/img/samples/light_green.gif&apos;, &apos;SUCCESS&apos;), 
+IF(ISPICKVAL(SyncStatus__c , &apos;WARNING&apos;), IMAGE(&apos;/img/samples/light_yellow.gif&apos;, &apos;WARNING&apos;), 
+IF(ISPICKVAL(SyncStatus__c , &apos;ERROR&apos;), IMAGE(&apos;/img/samples/light_red.gif&apos;, &apos;ERROR&apos;), 
+IMAGE(&apos;/img/alohaSkin/help_grey.png&apos;, &apos;UNKNOWN&apos;) 
+))) 
+
+))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Sync Status</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

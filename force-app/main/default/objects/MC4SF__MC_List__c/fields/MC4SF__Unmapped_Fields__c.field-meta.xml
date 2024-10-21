@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Unmapped_Fields__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Unmapped Fields</label>
+    <summaryFilterItems>
+        <field>MC4SF__MC_Merge_Variable__c.MC4SF__Contact_Field_Mapping__c</field>
+        <operation>equals</operation>
+        <value></value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>MC4SF__MC_Merge_Variable__c.MC4SF__Lead_Field_Mapping__c</field>
+        <operation>equals</operation>
+        <value></value>
+    </summaryFilterItems>
+    <summaryForeignKey>MC4SF__MC_Merge_Variable__c.MC4SF__MC_List__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

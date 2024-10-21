@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maximum_Length_Of_Opp_Name_80</fullName>
+    <active>true</active>
+    <errorConditionFormula>LEN(Name) &gt; 80</errorConditionFormula>
+    <errorDisplayField>Name</errorDisplayField>
+    <errorMessage>The maximum length of the Name is 80 characters</errorMessage>
+</ValidationRule>

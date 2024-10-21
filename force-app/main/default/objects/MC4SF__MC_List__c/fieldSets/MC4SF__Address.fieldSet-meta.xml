@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FieldSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Address</fullName>
+    <description>List Page</description>
+    <displayedFields>
+        <field>MC4SF__Beamer_Address__c</field>
+        <isFieldManaged>false</isFieldManaged>
+        <isRequired>false</isRequired>
+    </displayedFields>
+    <label>Address</label>
+</FieldSet>

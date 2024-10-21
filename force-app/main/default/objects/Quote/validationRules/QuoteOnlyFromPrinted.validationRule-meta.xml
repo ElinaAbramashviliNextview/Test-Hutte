@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteOnlyFromPrinted</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(!ISPICKVAL(PRIORVALUE(Status),&apos;Printed&apos;),  ISCHANGED(Status),  ISPICKVAL(Status, &apos;Quoted&apos;))</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>You can change Status to &apos;Quoted&apos; only from &apos;Printed&apos;.</errorMessage>
+</ValidationRule>

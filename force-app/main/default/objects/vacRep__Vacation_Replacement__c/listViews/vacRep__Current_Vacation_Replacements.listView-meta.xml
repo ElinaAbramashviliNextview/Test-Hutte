@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>vacRep__Current_Vacation_Replacements</fullName>
+    <columns>NAME</columns>
+    <columns>vacRep__active__c</columns>
+    <columns>vacRep__Startdate__c</columns>
+    <columns>vacRep__Enddate__c</columns>
+    <columns>vacRep__Owner__c</columns>
+    <columns>vacRep__Replacement_User__c</columns>
+    <columns>vacRep__Objects__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>vacRep__Startdate__c</field>
+        <operation>lessOrEqual</operation>
+        <value>TODAY</value>
+    </filters>
+    <filters>
+        <field>vacRep__Enddate__c</field>
+        <operation>greaterThan</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Current Vacation Replacements</label>
+</ListView>

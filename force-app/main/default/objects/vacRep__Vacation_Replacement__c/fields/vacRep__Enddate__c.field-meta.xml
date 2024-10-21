@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>vacRep__Enddate__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Date when the affected records should be transferred back</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Date when the affected records should be transferred back</inlineHelpText>
+    <label>Enddate</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

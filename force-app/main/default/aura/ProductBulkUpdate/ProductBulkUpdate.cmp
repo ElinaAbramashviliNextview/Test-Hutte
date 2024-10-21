@@ -1,0 +1,163 @@
+<aura:component controller="ProductBulkUpdateController" implements="force:appHostable,force:lightningQuickAction,lightning:actionOverride,flexipage:availableForAllPageTypes" access="global">
+	
+	<!-- HANDLERS -->
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+	<!-- ATTRIBUTTES -->
+    <aura:attribute name="isReady" type="Boolean" default="false"/>
+	<aura:attribute name="isLoading" type="Boolean" default="true" />
+    <aura:attribute name="isReadyTable" type="Boolean" default="false"/>
+	<aura:attribute name="isLoadingTable" type="Boolean" default="true" />
+
+	<aura:attribute name="initData" type="Object" />
+
+    <aura:attribute name="searchProdType" type="String" default="0"/>
+	<aura:attribute name="searchProdSpec" type="String" default="0"/>
+	<aura:attribute name="searchProdName" type="String" default=""/>
+	<aura:attribute name="searchResult" type="Object"/>
+	<aura:attribute name="shortSearchView" type="Object"/>
+	<aura:attribute name="searchResultCount" type="Integer" default="0"/>
+
+    <aura:attribute name="email" type="String"/>
+    <aura:attribute name="docId" type="String" default=""/>
+
+	<lightning:spinner variant="brand" size="large" class="{!if(v.isLoading, '','slds-hide')}" alternativeText="Loader"/>
+	<aura:if isTrue="{!v.isReady}">
+		<div class="body slds-var-p-around_x-small slds-card">
+			<!-- HEADERS -->
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning:icon iconName="standard:product" alternativeText="Search Results"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span class="slds-text-title_caps"></span>
+                                            <span class="slds-page-header__title slds-truncate">Product Bulk Update</span>
+                                            <span ></span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__controls">
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li style="margin-top: 7px;">E-mail:&nbsp;</li>
+                                    <li>
+                                        <div class="slds-col slds-var-m-right_small">
+                                            <lightning:input type="text" value="{!v.email}" label="Email" variant="label-hidden"/>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <aura:if isTrue="{!!v.docId}">
+                                            <button id="sendExport" class="slds-button slds-button_brand" onclick="{!c.sendExport}" disabled="{!if(or(!v.searchResult, !v.email),'disabled','')}">
+                                                <lightning:icon class="whiteIcon" iconName="utility:send" size="x-small" />&nbsp;Send Export
+                                            </button>
+                                            <aura:set attribute="else">
+                                                <button id="updateData" class="slds-button slds-button_brand" onclick="{!c.updateData}">
+                                                    <lightning:icon class="whiteIcon" iconName="utility:upload" size="x-small" />&nbsp;Update Products
+                                                </button>
+                                            </aura:set>
+                                        </aura:if>
+                                    </li>
+                                    <li>
+                                        <div class="slds-col slds-var-m-left_small">
+                                            <button id="updateData" class="slds-button slds-button_neutral" onclick="{!c.manualBackup}">
+                                                <lightning:icon iconName="utility:copy" size="x-small" />&nbsp;Manual Backup to G-Drive
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BODY -->
+            <div class="slds-var-m-left_small slds-var-m-right_small slds-var-m-bottom_small">
+                <aura:if isTrue="{!v.initData.isImportEnabled}">
+                    <lightning:fileUpload label="Product Import"
+                        name="['.csv']"
+                        multiple="false"
+                        accept="{!v.filetype}"
+                        recordId="{!v.initData.tmpRecordId}"
+                        onuploadfinished="{!c.handleUploadFinished}" />
+                    <aura:set attribute="else">
+                        <div class="slds-text-heading_medium">Import running in background. Please try again later.</div>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <div class="slds-var-m-left_small slds-var-m-right_small slds-var-m-bottom_small">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning:select name="Product Type" label="Type" value="{!v.searchProdType}" onchange="{!c.changeFilter}" disabled="{!if(v.docId, 'disabled', '')}">
+                            <aura:iteration items="{!v.initData.typePickVals}" var="type">
+                                <option value="{!type.value}">{!type.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning:select name="Product Specification" label="Specification" value="{!v.searchProdSpec}" onchange="{!c.changeFilter}" disabled="{!if(v.docId, 'disabled', '')}">
+                            <aura:iteration items="{!v.initData.specPickVals}" var="spec">
+                                <option value="{!spec.value}">{!spec.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <label class="slds-form-element__label">Product Name</label>
+                        <lightning:helptext content="Result list is limited to 50 records, please fill at least 3 characters."/>
+                        <lightning:input type="text" name="Product Name" label="Product Name" variant="label-hidden" value="{!v.searchProdName}" onchange="{!c.changeFilter}" readonly="{!if(v.docId, true, false)}"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning:input type="text" name="Number of records" label="Number of records" value="{!v.searchResultCount}" onchange="{!c.changeFilter}" readonly="true"/>
+                    </div>
+                </div>
+            </div>
+            <div >
+                <div class="slds-var-m-left_small slds-var-m-right_small">
+                    <table class="slds-table slds-table_bordered slds-table_fixed-layout">
+                        <thead>
+                            <tr scope="row" class="slds-text-title_caps">
+                                <th width="35%">Product Name</th>
+                                <th width="45%">Short Description</th>
+                                <th width="10%">Product Family</th>
+                                <th width="5%">Active</th>
+                                <th width="7%">Unit Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody class="clickable">
+                            <aura:iteration items="{!v.shortSearchView}" var="sr" indexVar="i">
+                                <tr scope="row" data-sr-id="{!sr.Id}">
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!sr.Name}">{!sr.Name}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!sr.Description}">{!sr.Description}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!sr.Family}">{!sr.Family}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">
+                                            <lightning:input type="checkbox" checked="{!sr.IsActive}" readonly="true"/>
+                                        </div>
+                                    </td>
+                                    <td class="slds-text-align_right" role="gridcell" style="padding-right: 20px;">
+                                        CZK&nbsp;<lightning:formattedNumber value="{!sr.UnitCost__c}" maximumFractionDigits="2" minimumFractionDigits="0"/>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+		</div>
+	</aura:if>
+</aura:component>

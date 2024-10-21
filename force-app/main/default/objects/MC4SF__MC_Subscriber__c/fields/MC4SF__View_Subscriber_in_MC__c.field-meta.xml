@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__View_Subscriber_in_MC__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(MC4SF__Web_ID__c), &quot;&quot;,
+HYPERLINK(&quot;https://&quot; &amp;  $Setup.MC4SF__Global_Settings__c.MC4SF__Data_Center__c &amp; &quot;.admin.mailchimp.com/lists/members/view?id=&quot; &amp;  TEXT(MC4SF__Web_ID__c) , &quot;View Subscriber in MC&quot;)
+)</formula>
+    <label>View Subscriber in MC</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

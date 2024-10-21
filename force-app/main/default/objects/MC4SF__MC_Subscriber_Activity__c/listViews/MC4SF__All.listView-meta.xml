@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__All</fullName>
+    <columns>MC4SF__MC_List__c</columns>
+    <columns>MC4SF__MC_Subscriber__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>NAME</columns>
+    <columns>MC4SF__MC_Campaign__c</columns>
+    <columns>MC4SF__Action__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>MC4SF__MC_Campaign__c</field>
+        <operation>equals</operation>
+        <value>03/2023_Elite_Spark a ceník_EN</value>
+    </filters>
+    <label>All</label>
+</ListView>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Private__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Custom Private to be able to filter on Reports</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Custom Private to be able to filter on Reports</inlineHelpText>
+    <label>Is Private</label>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>vacRep__Record_Link__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Link to the replaced record</description>
+    <externalId>false</externalId>
+    <formula>IF(NOT(ISBLANK(vacRep__Record_Id__c)), HYPERLINK(&quot;/&quot; &amp; vacRep__Record_Id__c, vacRep__Record_Id__c), &quot;&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Link to the replaced record</inlineHelpText>
+    <label>Record Link</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

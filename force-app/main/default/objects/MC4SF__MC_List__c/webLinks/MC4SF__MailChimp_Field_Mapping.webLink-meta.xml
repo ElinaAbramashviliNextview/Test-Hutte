@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__MailChimp_Field_Mapping</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <height>600</height>
+    <linkType>page</linkType>
+    <masterLabel>MailChimp Field Mapping</masterLabel>
+    <openType>sidebar</openType>
+    <page>MC4SF__Mappings</page>
+    <protected>false</protected>
+</WebLink>

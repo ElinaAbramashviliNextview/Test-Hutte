@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>error</fullName>
+        <default>false</default>
+        <label>error</label>
+    </customValue>
+    <customValue>
+        <fullName>info</fullName>
+        <default>false</default>
+        <label>info</label>
+    </customValue>
+    <customValue>
+        <fullName>success</fullName>
+        <default>false</default>
+        <label>success</label>
+    </customValue>
+    <customValue>
+        <fullName>warn</fullName>
+        <default>false</default>
+        <label>warn</label>
+    </customValue>
+    <masterLabel>Service Status</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

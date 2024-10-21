@@ -1,0 +1,13 @@
+<template>
+    <lightning-tabset variant="vertical">
+        <template for:each={tabStructure.items} for:item="tab">
+            <lightning-tab class="no-padding" key={tab.name} label={tab.label} value={tab.name} onactive={handleActive}>
+                <template if:true={tab.items.length}>
+                    <c-product-assistant-tabset
+                        tab-structure={tab}
+                    ></c-product-assistant-tabset>
+                </template>
+            </lightning-tab>
+        </template>
+    </lightning-tabset>
+</template>

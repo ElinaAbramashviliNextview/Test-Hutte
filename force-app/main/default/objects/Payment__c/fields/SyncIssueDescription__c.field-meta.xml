@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SyncIssueDescription__c</fullName>
+    <description>If some problem occurs with pairing to records during sync, this will be described here</description>
+    <externalId>false</externalId>
+    <inlineHelpText>If some problem occurs with pairing to records during sync, this will be described here</inlineHelpText>
+    <label>Sync Issue Description</label>
+    <length>10000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>5</visibleLines>
+</CustomField>

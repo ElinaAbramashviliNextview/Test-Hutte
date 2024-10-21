@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Member_Rating_Image__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>IMAGE(  CASE(MC4SF__Member_Rating__c,  1, &quot;/img/samples/stars_100.gif&quot;, 2, &quot;/img/samples/stars_200.gif&quot;, 3, &quot;/img/samples/stars_300.gif&quot;,  4, &quot;/img/samples/stars_400.gif&quot;,  5, &quot;/img/samples/stars_500.gif&quot;,  &quot;/img/samples/stars_000.gif&quot;),  &quot;&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Member Rating</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

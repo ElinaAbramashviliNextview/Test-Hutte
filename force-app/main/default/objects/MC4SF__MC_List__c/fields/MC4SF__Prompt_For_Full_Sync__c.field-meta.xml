@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Prompt_For_Full_Sync__c</fullName>
+    <defaultValue>false</defaultValue>
+    <deprecated>false</deprecated>
+    <description>When a mapping field is updated, this value will get set to true.  If a user tries clicks Sync Audience, they will be prompted to sync all historical lead/contact data to Mailchimp.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>When a mapping field is updated, this value will get set to true.  If a user tries clicks Sync Audience, they will be prompted to sync all historical lead/contact data to Mailchimp.</inlineHelpText>
+    <label>Prompt For Full Sync</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

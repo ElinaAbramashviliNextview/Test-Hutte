@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Hourly_Stats_Emails_Sent__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Hourly Stats - Emails Sent</label>
+    <summarizedField>MC4SF__MC_Campaign_Hourly_Stats__c.MC4SF__Emails_Sent__c</summarizedField>
+    <summaryForeignKey>MC4SF__MC_Campaign_Hourly_Stats__c.MC4SF__MC_Campaign__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

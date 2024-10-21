@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsDefault__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Determines if Product is created in SAP and is available for adding to Quote</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Determines if Product is created in SAP and is available for adding to Quote</inlineHelpText>
+    <label>Default</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

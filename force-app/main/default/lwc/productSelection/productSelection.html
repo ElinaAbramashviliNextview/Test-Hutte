@@ -1,0 +1,24 @@
+<template>
+  <div class="product-selection-wrapper">
+    <div class="slds-p-bottom_large">
+      <lightning-combobox
+        name="product-family"
+        label={label.selectFamily}
+        value={productFamily}
+        options={productFamilies}
+        placeholder={label.picklistPlaceholder}
+        onchange={handleFamilySelect}
+        required
+      ></lightning-combobox>
+    </div>
+    <template lwc:if={products}>
+      <c-product-table 
+        key-field="ItemCode" 
+        table-data={products} 
+        columns={columns} 
+        max-row-selection="1" 
+        onrowselected={handleRowSelected}
+      ></c-product-table>
+    </template>
+  </div>
+</template>

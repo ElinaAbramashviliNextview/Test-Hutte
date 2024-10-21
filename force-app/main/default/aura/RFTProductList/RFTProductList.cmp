@@ -1,0 +1,86 @@
+<aura:component controller="RFTProductListController" implements="force:appHostable,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,flexipage:availableForAllPageTypes" access="global">
+	
+	<!-- HANDLERS -->
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+	<!-- ATTRIBUTTES -->
+    <aura:attribute name="isReady" type="Boolean" default="false"/>
+	<aura:attribute name="isLoading" type="Boolean" default="true" />
+
+	<aura:attribute name="isModalOpen" type="Boolean" default="false"/>
+
+	<aura:attribute name="recordId" type="String"/>
+	<aura:attribute name="prodList" type="Object[]" />
+
+	<lightning:spinner variant="brand" size="small" class="{!if(v.isLoading, '','slds-hide')}" alternativeText="Loader"/>
+	<aura:if isTrue="{!v.isReady}">
+
+		<article class="slds-card">
+			<div class="slds-card__header slds-grid">
+				<header class="slds-media slds-media_center slds-has-flexi-truncate">
+					<div class="slds-media__figure">
+						<lightning:icon iconName="standard:product"/>
+					</div>
+					<div class="slds-media__body">
+						<h1 class="slds-page-header__title">Product List</h1>
+					</div>
+					<div class="slds-page-header__col-actions">
+						<div class="slds-page-header__controls">
+							<div class="slds-page-header__control">
+								<ul class="slds-button-group-list">
+									<li>
+										<button class="slds-button slds-button_brand" onclick="{!c.newProduct}">
+											<lightning:icon class="whiteIcon" iconName="utility:add" size="x-small"/>&nbsp;New Product
+										</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</header>
+			</div>
+			<div class="slds-card__body slds-card__body_inner">
+				<aura:if isTrue="{!v.prodList.length > 0}">
+					<div class="listView">
+						<table class="slds-table slds-table_bordered">
+							<thead>
+								<tr class="slds-text-title_caps">
+									<th style="width:5%"></th>
+									<th style="width:89%" scope="col">Product Name</th>
+									<th style="width:3%"></th>
+									<th style="width:3%"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<aura:iteration items="{!v.prodList}" var="prod" indexVar="i">
+									<tr>
+										<td>
+											{!i+1}
+										</td>
+										<td>
+											{!prod.name}
+										</td>
+										<td>
+											<div data-prod-id="{!prod.id}" onclick="{!c.editProduct}">
+												<lightning:buttonIcon iconName="utility:settings" variant="bare" alternativeText="Edit" title="Edit"/>
+											</div>
+										</td>
+										<td>
+											<div data-prod-id="{!prod.id}" onclick="{!c.deleteProduct}">
+												<lightning:buttonIcon iconName="utility:delete" variant="bare" alternativeText="Delete" title="Delete" iconClass="color-red"/>
+											</div>
+										</td>
+									</tr>
+								</aura:iteration>
+							</tbody>
+						</table>
+					</div>
+					<aura:set attribute="else">
+						There is no Product linked to this Request.
+					</aura:set>
+				</aura:if>
+			</div>
+		</article>		
+
+	</aura:if>
+</aura:component>

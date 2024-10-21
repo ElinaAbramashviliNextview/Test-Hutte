@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Architect__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Optional Person related to the Architect Account</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Optional Person related to the Architect Account</inlineHelpText>
+    <label>Architect</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Contact.AccountId</field>
+            <operation>equals</operation>
+            <valueField>$Source.Architect_Account__c</valueField>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Opportunities (Architect)</relationshipLabel>
+    <relationshipName>OpportunitiesArchitect</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

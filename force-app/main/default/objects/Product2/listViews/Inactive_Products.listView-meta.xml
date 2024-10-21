@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inactive_Products</fullName>
+    <columns>PRODUCT2.NAME</columns>
+    <columns>PRODUCT2.CUSTOMER_PRODUCT_ID</columns>
+    <columns>SAPId__c</columns>
+    <columns>PRODUCT2.DESCRIPTION</columns>
+    <columns>PRODUCT2.FAMILY</columns>
+    <columns>UnitCost__c</columns>
+    <columns>Type__c</columns>
+    <columns>Specification__c</columns>
+    <columns>SyncStatus__c</columns>
+    <columns>UnitPriceCZK__c</columns>
+    <columns>UnitPriceEUR__c</columns>
+    <columns>UnitPriceUSD__c</columns>
+    <columns>PRODUCT2.ACTIVE</columns>
+    <filterScope>Everything</filterScope>
+    <label>Inactive Products</label>
+</ListView>

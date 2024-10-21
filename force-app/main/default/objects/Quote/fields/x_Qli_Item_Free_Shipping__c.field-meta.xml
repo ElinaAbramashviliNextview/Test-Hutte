@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>x_Qli_Item_Free_Shipping__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>If related QLI record has Free Shipping then set this field to true for the AP purposes</description>
+    <externalId>false</externalId>
+    <inlineHelpText>If related QLI record has Free Shipping then set this field to true for the AP purposes</inlineHelpText>
+    <label>Qli Free Shipping</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

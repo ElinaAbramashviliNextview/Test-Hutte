@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Parent_MC_Subscriber__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Parent MC Subscriber</label>
+    <referenceTo>MC4SF__MC_Subscriber__c</referenceTo>
+    <relationshipLabel>MC Subscribers</relationshipLabel>
+    <relationshipName>MC_Subscribers</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

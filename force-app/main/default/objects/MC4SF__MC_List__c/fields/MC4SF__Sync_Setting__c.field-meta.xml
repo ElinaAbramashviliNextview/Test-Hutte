@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MC4SF__Sync_Setting__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Sync Setting</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Keep All Activity</fullName>
+                <default>false</default>
+                <label>Keep All Activity</label>
+            </value>
+            <value>
+                <fullName>Keep Activity for 1 Year</fullName>
+                <default>false</default>
+                <label>Keep Activity for 1 Year</label>
+            </value>
+            <value>
+                <fullName>Keep Activity for 6 Months</fullName>
+                <default>false</default>
+                <label>Keep Activity for 6 Months</label>
+            </value>
+            <value>
+                <fullName>Keep Activity for 3 Months</fullName>
+                <default>false</default>
+                <label>Keep Activity for 3 Months</label>
+            </value>
+            <value>
+                <fullName>Keep Activity for 1 Months</fullName>
+                <default>false</default>
+                <label>Keep Activity for 1 Months</label>
+            </value>
+            <value>
+                <fullName>Keep Activity for 14 Days</fullName>
+                <default>false</default>
+                <label>Keep Activity for 14 Days</label>
+            </value>
+            <value>
+                <fullName>Keep Activity for 7 Days</fullName>
+                <default>false</default>
+                <label>Keep Activity for 7 Days</label>
+            </value>
+            <value>
+                <fullName>Sync Subscribers Only</fullName>
+                <default>true</default>
+                <label>Sync Subscribers Only</label>
+            </value>
+            <value>
+                <fullName>Do Not Sync</fullName>
+                <default>false</default>
+                <label>Do Not Sync</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

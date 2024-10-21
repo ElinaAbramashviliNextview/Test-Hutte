@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Client_reference_Nr_NOT_REQUIRED__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Mark this checkbox in case you don&apos;t want to add a Client reference number. In case the Checkbox = TRUE, the validation for this fields is not triggered</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Mark this checkbox in case you don&apos;t want to add a Client reference number</inlineHelpText>
+    <label>Client reference Number NOT REQUIRED</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

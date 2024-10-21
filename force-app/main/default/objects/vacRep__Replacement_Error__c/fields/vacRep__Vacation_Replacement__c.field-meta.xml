@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>vacRep__Vacation_Replacement__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Vacation Replacement Record for that the error message applies</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Vacation Replacement Record for that the error message applies</inlineHelpText>
+    <label>Vacation Replacement</label>
+    <referenceTo>vacRep__Vacation_Replacement__c</referenceTo>
+    <relationshipLabel>Replacement Errors</relationshipLabel>
+    <relationshipName>Replacement_Errors</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

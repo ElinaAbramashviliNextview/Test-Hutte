@@ -1,0 +1,19 @@
+<template>
+  <template lwc:if={configuration}>
+    <div class="choice-tab">
+      <c-product-table 
+        table-data={configuration} 
+        columns={columns} 
+        key-field="ItemCode" 
+        hide-checkbox-column="true"
+      >
+      </c-product-table>
+    </div>
+  </template>
+  <template lwc:else>
+      <lightning-card>
+          <span>
+            {label.noConfigText}
+          </span>
+      </lightning-card></template>
+</template>

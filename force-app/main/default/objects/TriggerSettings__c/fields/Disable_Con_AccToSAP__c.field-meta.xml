@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disable_Con_AccToSAP__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Disable Account and Contact Sync To SAP in Contact Trigger</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Disable Account and Contact Sync To SAP in Contact Trigger</inlineHelpText>
+    <label>Disable Con_AccToSAP</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

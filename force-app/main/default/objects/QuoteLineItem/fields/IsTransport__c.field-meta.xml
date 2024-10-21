@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsTransport__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Determines if row is specific type of Transport.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Determines if row is specific type of Transport.</inlineHelpText>
+    <label>Transport</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,430 @@
+<apex:page standardController="Quote" renderAs="PDF" extensions="QuotePdfController" applyBodyTag="false" applyHtmlTag="false" showHeader="false" language="{!Quote.Language__c}">
+
+<html>
+    <head>
+        <title>Complaint Report</title>
+    <meta charset="utf-8" /> 
+    <!--=========================================================================================================================== 
+    STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - STYLES - S
+    ==============================================================================================================================-->
+        <apex:outputPanel layout="none" rendered="{!isDraft && Quote.Language__c == 'cs'}">
+            <style type="text/css" media="print">
+                @page {
+                    background-image: url('{!URLFOR($Resource.DraftCZ)}');
+                }
+            </style>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!isDraft && Quote.Language__c == 'en_US'}">
+            <style type="text/css" media="print">
+                @page {
+                    background-image: url('{!URLFOR($Resource.DraftEN)}');
+                }
+            </style>
+        </apex:outputPanel>
+        
+        <style type="text/css" media="print">
+        /* Structure */
+            * {
+                font-family: Arial Unicode MS !important;
+                /*color: #363636;*/
+            } /* Required for all, because SF richtext editor creates inline styles with different fonts*/
+            body, html {
+                font-size: 12px !important;
+               
+            }
+            @page {
+                size: portrait;
+                margin: 90px 0 90px 0;
+                padding: 0;
+
+                @top-center {
+                    content: element(pageHeader);
+                }
+
+                @bottom-center {
+                    content: element(footer);
+                }                
+            }
+
+            ul {
+                margin: 0;
+            }
+            ul.dashed {
+                list-style-type: none;
+            }
+            ul.dashed > li {
+                text-indent: -5px;
+            }
+            ul.dashed > li:before {
+                content: "-";
+                text-indent: -5px;
+            }
+
+        /* Header */
+            div#pageHeader {position:running(pageHeader);}
+            div.header{display:block; padding-right:30px; text-align: right;}
+
+        /* Footer */ 
+            div#footer{border-top: 1px solid #959595;display:block; padding:0 90px; color:#323232; font-size:12px; position:running(footer); text-align: right}
+            div#footer a{color:#000; text-decoration:none;}
+
+        
+
+        /* Page Breaking */
+            img{page-break-inside: avoid; page-break-before: avoid; page-break-after: avoid;}
+            .auto-break{page-break-after: auto;}
+            .no-break{page-break-after: avoid;}
+            .no-break-child *{page-break-after: avoid; page-break-before: avoid;}
+            .break{page-break-before: always;}
+
+         /* Common Styles */
+            h1 *, h2 *, h3 *, h4 *, h5 * {vertical-align: middle;}
+            h1, h2, h3, h4, h5 {margin:0 0 10px 0; padding: 0}
+            h1 {font-size: 24px;}
+            h2 {font-size: 20px;}
+            h3 {font-size: 18px;}
+
+            h4 {font-size: 14px;}
+            a{color: #363636;}
+            .uniform-long-text * {font-size:13px!important;}
+            p{margin:0; padding:0;}
+
+            ul.dashed {list-style-type: none;}
+            ul.dashed > li:before {content: "- ";}
+
+            table {border-collapse: collapse;}
+            .bordered td, .bordered th {border: 1px solid black;}
+            thead{background-color: #bfbfbf;}
+                
+            .p-t-20{padding-top: 20px}
+
+            .m-t-10 {
+                margin-top: 10px;
+            }
+            .m-t-15 {
+                margin-top: 15px;
+            }
+            .m-t-30{margin-top: 30px}
+            .m-t-60{margin-top: 60px}
+            .m-b-10{margin-bottom: 10px}
+            .m-b-15 {
+                margin-bottom: 15px;
+            }
+            .m-b-30{margin-bottom: 30px}
+            .m-b-60{margin-bottom: 60px}
+            .f14{font-size: 14px}
+            .upperCase{text-transform: uppercase;}
+            .text-right{text-align: right;}
+            .text-center{text-align: center;}
+            .blackTxt {color: #000;}
+            .grayTxt {color: #363636;}
+            .lightGrayTxt {color: #414141;}
+            .vertical-top{
+                vertical-align: text-top;
+            }
+        /* Colors */
+            .fg-primary{color: #c82127;}
+            .fg-grey{color: #444;}
+            .bg-light-grey{background-color: #f5f5f5}
+            .bg-gray {
+                background-color: #aaaaaa;
+            }
+
+
+        /* Standard pages */
+            div.content {
+                padding: 0 90px;
+            }
+
+        /* Specific styles */
+            .hide {
+                display:none;
+            }
+        </style>
+    </head>
+    <body>
+
+    <apex:variable var="sectionCount" value="{!0}"/>
+    <!--=========================================================================================================================== 
+    HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS - HEADERS
+    ===============================================================================================================================-->
+        <div id="pageHeader" class="header">
+            <div class="text-right">
+                <apex:image url="{!URLFOR($Resource.SilentLab_Logo)}" height="50"/>
+            </div>
+        </div>
+
+    <!--=========================================================================================================================== 
+    FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS - FOOTERS
+    ===============================================================================================================================-->
+        <div>
+            <div Class="grayTxt" id="footer" style="font-size: 10px">
+                <div >SilentLab s.r.o.</div>
+                <div>{!$Label.QuotePDF_Street}</div>
+                <div>{!$Label.QuotePDF_City}</div>
+                <div>{!$Label.QuotePDF_Web}</div>
+            </div>
+        </div>
+
+    <!--=========================================================================================================================== 
+    CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT - CONTENT
+    ===============================================================================================================================-->
+        <div class="content p-t-20">
+            <div>
+                <h1 class="upperCase blackTxt">{!$Label.QuotePDF_PriceQuotation} {!Quote.QuoteNo__c}</h1>
+                <h2 Class="blackTxt">{!$Label.QuotePDF_Project}: {!Quote.Opportunity.Name}</h2>
+                <h3><span class="blackTxt">{!$Label.QuotePDF_Date}:</span> <span Class="grayTxt">{!currentDate}</span></h3>
+                <!-- Submitter -->
+                <apex:outputPanel rendered="{!Quote.Account.Name != null}">
+                    <div class="m-t-30 m-b-30">
+                        <div Class="blackTxt">{!$Label.QuotePDF_To}:</div>
+                        <div Class="blackTxt">{!Quote.Account.Name}</div>
+                        <div class="grayTxt" style="font-size: 12px">
+                            <apex:outputPanel rendered="{!Quote.Contact.Name != null}">{!Quote.Contact.Name}</apex:outputPanel>
+                            <apex:outputPanel rendered="{!Quote.Contact.MobilePhone != null}">|T:{!Quote.Contact.MobilePhone}</apex:outputPanel>
+                            <apex:outputPanel rendered="{!Quote.Contact.Email != null}">|E:{!Quote.Contact.Email}</apex:outputPanel>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <!-- Contractor -->
+                <apex:outputPanel rendered="{!currentUser.CompanyName != null}">
+                    <div class="m-t-30 m-b-30">
+                        <div Class="blackTxt">{!$Label.QuotePDF_From}:</div>
+                        <div Class="blackTxt">{!currentUser.CompanyName}</div>
+                        <div class="grayTxt" style="font-size: 12px">
+                             <apex:outputPanel rendered="{!currentUser.Name != null}">{!currentUser.Name}</apex:outputPanel>
+                             <apex:outputPanel rendered="{!currentUser.MobilePhone != null}">|T:{!currentUser.MobilePhone}</apex:outputPanel>
+                             <apex:outputPanel rendered="{!currentUser.Email != null}">|E:{!currentUser.Email}</apex:outputPanel>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <!-- Quote Image -->
+                <div style="text-align: center">
+                    <apex:image url="{!URLFOR($Resource.QuoteImage)}" height="360"/>
+                </div>
+                <apex:outputPanel rendered="{!Quote.Owner.Name != null}">
+                    <div style="font-size: 12px; margin-bottom: 20px;">{!$Label.QuotePDF_Processed}: {!Quote.Owner.Name} 
+                        <apex:outputPanel rendered="{!Quote.TechnicianUserId__r.Name != null}" layout="none">
+                            / {!Quote.TechnicianUserId__r.Name}
+                        </apex:outputPanel>
+                    </div>
+                </apex:outputPanel>
+                <div style="text-align: center; font-size:12px;">{!$Label.QuotePDF_FirstPageText}</div>
+                <!-- Product Detail-->
+                <apex:outputPanel rendered="{!qlisProd.size > 0}">
+                    <div class="break">
+                        <apex:repeat value="{!qlisProd}" var="qli">
+                            <apex:outputPanel rendered="{!and(qli.ProductType == 'V-VYROBEK', qli.showProduct)}" >
+                                <h2 class="break blackTxt">{!qli.ProductBusName}</h2>
+                                <div class="grayTxt"><apex:outputText escape="false" rendered="{!Quote.Language__c == 'cs'}" value="{!qli.ProductDescriptionCZ}"/></div>
+                                <div class="grayTxt"><apex:outputText escape="false" rendered="{!Quote.Language__c == 'en_US'}" value="{!qli.ProductDescriptionEN}"/></div>
+
+                                <div Class="m-t-15 m-b-15 grayTxt">
+                                    <apex:pageBlock >
+                                        <apex:pageBlockTable value="{!qli.qliDescs}" var="qliDesc" width="100%" headerClass="hide" cellspacing="10px" rendered="{!Quote.Language__c == 'cs' && qli.qliDescs.size > 0}" >
+                                            <apex:column width="30%" styleClass="vertical-top"><span Class="blackTxt vertical-top">{!qliDesc.TitleCZ__c}</span></apex:column>
+                                            <apex:column styleClass="grayTxt" value="{!qliDesc.DescriptionCZ__c}"/>
+                                        </apex:pageBlockTable>
+                                        <apex:pageBlockTable value="{!qli.qliDescs}" var="qliDesc" width="100%" headerClass="hide" cellspacing="10px" rendered="{!Quote.Language__c == 'en_US' && qli.qliDescs.size > 0}">
+                                            <apex:column width="30%" styleClass="vertical-top"><span Class="blackTxt vertical-top">{!qliDesc.TitleEN__c}</span></apex:column>
+                                            <apex:column styleClass="grayTxt" value="{!qliDesc.DescriptionEN__c}"/>
+                                        </apex:pageBlockTable>
+
+                                        <apex:pageBlockTable rendered="{!Quote.Language__c == 'cs'}" value="{!qli.qlsis}" var="qlsi" width="100%" headerClass="hide" cellspacing="10px">
+                                            <apex:column width="30%" styleClass="vertical-top">
+                                                <apex:outputpanel styleClass="blackTxt">
+                                                    <apex:outputField value="{!qlsi.Product2Id__r.Specification__c}"/>
+                                                </apex:outputPanel>
+                                            </apex:column>
+                                            <apex:column styleClass="grayTxt vertical-top" rendered="{!qlsi.Product2Id__r.BusinessName__c != null}" value="{!qlsi.Product2Id__r.BusinessName__c}"/>
+                                            <apex:column styleClass="grayTxt" rendered="{!qlsi.Product2Id__r.BusinessName__c == null}" value="{!qlsi.Product2Id__r.Name}"/>
+                                        </apex:pageBlockTable>
+                                        <apex:pageBlockTable rendered="{!Quote.Language__c == 'en_US'}" value="{!qli.qlsis}" var="qlsi" width="100%" headerClass="hide" cellspacing="10px">
+                                            <apex:column width="30%" styleClass="vertical-top">
+                                                <apex:outputpanel styleClass="blackTxt">
+                                                    <apex:outputField styleClass="blackTxt" value="{!qlsi.Product2Id__r.Specification__c}"/>
+                                                </apex:outputPanel>
+                                            </apex:column>
+                                            <apex:column styleClass="grayTxt vertical-top" rendered="{!qlsi.Product2Id__r.BusinessNameEN__c != null}" value="{!qlsi.Product2Id__r.BusinessNameEN__c}"/>
+                                            <apex:column styleClass="grayTxt" rendered="{!qlsi.Product2Id__r.BusinessNameEN__c == null}" value="{!qlsi.Product2Id__r.Name}"/>
+                                        </apex:pageBlockTable>
+                                    </apex:pageBlock>
+                                </div>
+
+                                <apex:repeat value="{!cdls}" var="cdl">
+                                    <apex:outputPanel rendered="{!qli.Product2Id == cdl.LinkedEntityId}">
+                                        <div class="m-t-10 m-b-10 text-center">
+                                            <apex:image url="/sfc/servlet.shepherd/version/download/{!cdl.ContentDocument.LatestPublishedVersionId}" height="380"/>
+                                        </div>
+                                        <div class="text-center">{!$Label.QuotePDF_IllustrationPhoto}: {!qli.ProductBusName}</div>
+                                    </apex:outputPanel>
+                                </apex:repeat>
+                            </apex:outputPanel>
+                        </apex:repeat>
+                    </div>
+                </apex:outputPanel>
+
+                <!-- Table Section -->
+                <div class="break grayTxt">
+                    <h2>{!$Label.QuotePDF_Price}</h2>
+                    <apex:outputPanel rendered="{!qlisProd.size > 0}">
+                        <!-- PRODUCT TABLE -->
+                        <table class="bordered" width="100%" style="margin-bottom:10px">
+                            <thead>
+                                <tr>
+                                    <th width="41%">{!$Label.QuotePDF_Item}</th>
+                                    <!--<th>{!$Label.QuotePDF_ItemDescription}</th>-->
+                                    <th width="8%" class="text-center">{!$Label.QuotePDF_Quantity}</th>
+                                    <apex:outputPanel rendered="{!Quote.QPdf_IsDisplayListPrice__c}" layout="none">
+                                        <th width="13%" class="text-center">{!$Label.QuotePDF_UnitPrice}</th>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!Quote.QPdf_IsDisplayDiscount__c}" layout="none">
+                                        <th width="12%" class="text-center"><apex:outputText value="{!$Label.QuotePDF_Discount}"/></th>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!Quote.QPdf_IsDisplayDiscountUnitPrice__c}" layout="none">
+                                        <th width="13%" class="text-center"><apex:outputText value="{!$Label.QuotePDF_DiscountUnitPrice}"/></th>
+                                    </apex:outputPanel>
+                                    <th width="13%" class="text-center">{!$Label.QuotePDF_TotalPrice}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!qlisProd}" var="product">
+                                    <apex:outputText rendered="{!!product.isDelimiter}">
+                                        <tr class="{!if(or(!Quote.QPdf_IsDisplayProductSubtotal__c, and(Quote.QPdf_IsDisplayProductSubtotal__c,product.RelatedOptional == null)), 'blackTxt', 'lightGrayTxt')}">
+                                            <td>
+                                                <apex:outputText rendered="{!product.ProductBusName != null}">{!product.ProductBusName}</apex:outputText>
+                                                <apex:outputText rendered="{!product.ProductBusName == null}">{!product.ProductName}</apex:outputText>
+                                            </td>
+                                            <td class="text-center">{!product.Quantity}</td>
+                                            <apex:outputText rendered="{!Quote.QPdf_IsDisplayListPrice__c}">
+                                                <td class="text-right">{!product.ListPrice}</td>
+                                            </apex:outputText>
+                                            <apex:outputText rendered="{!Quote.QPdf_IsDisplayDiscount__c}">
+                                                <td class="text-right">{!product.RowDiscount}</td>
+                                            </apex:outputText>
+                                            <apex:outputText rendered="{!Quote.QPdf_IsDisplayDiscountUnitPrice__c}">
+                                                <td class="text-right">{!product.DiscountUnitPrice}</td>
+                                            </apex:outputText>
+                                            <td class="text-right"><apex:outputText value="{!product.RowTotalPrice}"/></td>
+                                        </tr>
+                                    </apex:outputText>
+                                    <apex:outputPanel layout="none" rendered="{!if(and(product.isDelimiter, product.showDelimiter, Quote.QPdf_IsDisplayProductSubtotal__c), true, false)}">
+                                        <tr class="blackTxt">
+                                            <td style="border: 0px" class="text-right" colspan="{!colspan}"></td>
+                                            <td style="border: 0px;" class="text-right">{!$Label.QuotePDF_Subtotal}</td>
+                                            <td style="border: 0px;" class="text-right">{!product.subtotal}</td>
+                                        </tr>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel layout="none" rendered="{!if(and(product.isDelimiter,Quote.QPdf_IsDisplayProductSubtotal__c), true, false)}">
+                                        <tr>
+                                            <td style="border: 0px">&nbsp;</td>
+                                        </tr>
+                                    </apex:outputPanel>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                        <div>
+                            <table class="m-b-30" width="100%">
+                                <apex:outputPanel rendered="{!Quote.QPdf_IsDisplayQuoteSubtotalPrice__c}" layout="none">
+                                    <tr>
+                                        <td Style="padding-bottom: 10px" class="upperCase blackTxt">{!$Label.QuotePDF_Total}</td>
+                                        <td style="text-align: right; padding-bottom: 10px" class="blackTxt"><apex:outputText value="{!subTotalProd}"/></td>
+                                    </tr>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!Quote.QPdf_IsDisplayQuoteDiscount__c && Quote.QuoteDiscount__c != null && Quote.QuoteDiscount__c > 0}" layout="none">
+                                    <tr>
+                                        <td Style="padding-bottom: 10px" class="upperCase blackTxt">{!$Label.QuotePDF_AdditionalDiscount}</td>
+                                        <td style="text-align: right; padding-bottom: 10px" class="blackTxt"><apex:outputText value="{!quoteDiscount}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td Style="padding-bottom: 10px" class="upperCase blackTxt">{!$Label.QuotePDF_PriceAfterDiscount}</td>
+                                        <td style="text-align: right" class="blackTxt"><apex:outputText value="{!prodTotaWithAllDisc}"/></td>
+                                    </tr>
+                                </apex:outputPanel>
+                            </table>
+                        </div>
+                    </apex:outputPanel>
+
+                    <!-- TRANSPORT TABLE -->
+                    <apex:outputPanel rendered="{!qlisTrans.size > 0}">
+                        <table class="bordered" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>{!$Label.QuotePDF_Item}</th>
+                                    <th class="text-center">{!$Label.QuotePDF_ItemDescription}</th>
+                                    <th class="text-center">{!$Label.QuotePDF_TotalPrice}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!qlisTrans}" var="trans">
+                                    <tr>
+                                        <td>
+                                            <apex:outputPanel rendered="{!trans.ProductBusName != null}" layout="none">{!trans.ProductBusName}</apex:outputPanel>
+                                            <apex:outputPanel rendered="{!trans.ProductBusName == null}" layout="none">{!trans.ProductName}</apex:outputPanel>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{!Quote.ShippingStreet + ', ' + Quote.ShippingCity}"/>
+                                        </td>
+                                        <td class="text-right"><apex:outputText value="{!trans.RowTotalPrice}"/></td>
+                                    </tr>
+                                </apex:repeat>
+                                <!-- <tr>
+                                    <td style="border: 0px">&nbsp;</td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                        <apex:outputPanel rendered="{!Quote.QPdf_IsDisplayQuoteSubtotalPrice__c}" layout="none">
+                            <table width="100%" style="margin-top: 10px">
+                                <tr>
+                                    <td class="upperCase blackTxt">{!$Label.QuotePDF_Total}</td>
+                                    <td style="text-align: right" class="blackTxt"><apex:outputText value="{!subTotalTrans}"/></td>
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!totalPriceVal > 0 && Quote.QPdf_IsDisplayQuoteTotalPrice__c}">
+                        <table class="m-b-60 m-t-30 f14" width="100%">
+                            <tr>
+                                <td class="upperCase blackTxt">{!$Label.QuotePDF_TotalPrice}</td>
+                                <td Class="blackTxt" style="text-align: right"><apex:outputText value="{!totalPrice}"/></td>
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                </div>
+                
+                <div class="{!if(or(and(prodCount > 2, qlisTrans.size > 0),and(prodCount > 4)), 'break m-b-60', 'm-b-30')} break">
+                    <h2 Class="blackTxt">{!$Label.QuotePDF_AdditionalInformation}</h2>
+                    <div class="grayTxt"><apex:outputText value="{!Quote.Description__c}" escape="false"/></div>
+                    <div class="grayTxt">{!$Label.QuotePDF_Thank}</div>
+                </div>
+
+                <div class="m-b-30 grayTxt">
+                    {!$Label.QuotePdf_Sincerely}
+                </div>
+
+                <!-- Current User Information -->
+                <apex:outputPanel rendered="{!!ISNULL(currentUser)}">
+                    <div class="m-b-10 blackTxt">{!currentUser.Name}</div>
+                    <div class="grayTxt">{!currentUser.MobilePhone}</div>
+                    <div class="grayTxt">{!currentUser.Email}</div>
+                    <div class="grayTxt">{!$Label.QuotePDF_Web}</div>
+                </apex:outputPanel>
+            </div>
+            <div class="break">
+                <apex:outputPanel >
+                    <h3 Class="blackTxt">{!$Label.QuotePdf_Attch1_Title}</h3>
+                    <div Class="blackTxt">{!$Label.QuotePdf_Attch1_SubTitle}</div>
+                    <div class="grayTxt"><apex:outputText value="{!$Label.QuotePdf_Attch1_Part1}" escape="false"/></div>
+                    <div Style="margin-bottom:20px"><apex:outputText value="{!$Label.QuotePdf_Attch1_Part2}" escape="false"/></div>
+                    <h3 Class="blackTxt">{!$Label.QuotePdf_Attch2_Title}</h3>
+                    <div class="grayTxt"><apex:outputText value="{!$Label.QuotePdf_Attch2_Part1}" escape="false"/></div>
+                    <div class="grayTxt" Style="margin-bottom:20px"><apex:outputText value="{!$Label.QuotePdf_Attch2_Part2}" escape="false"/></div>
+                     <h3 Class="blackTxt">{!$Label.QuotePdf_Attch3_B_Title}</h3>
+                    <div class="grayTxt"><apex:outputText value="{!$Label.QuotePdf_Attch3_B_Part1}" escape="false"/></div>
+                    <div class="grayTxt" Style="margin-bottom:20px"><apex:outputText value="{!$Label.QuotePdf_Attch3_B_Part2}" escape="false"/></div>
+                </apex:outputPanel>
+            </div>
+        </div>
+    </body>
+</html>
+</apex:page>
